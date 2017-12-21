@@ -580,7 +580,7 @@
 						<html:hidden styleId="editMode" property="editMode"/>
 
 						<html:hidden styleId="fractCategory" property="fractCategory"/>
-						<html:hidden styleId="taxCategory" property="taxCategory"/>
+						<!-- <html:hidden styleId="taxCategory" property="taxCategory"/> -->
 						<html:hidden styleId="productFractCategory" property="productFractCategory"/>
 						<input type="hidden" id="numDecAlignment" name="numDecAlignment" value="0">
 
@@ -619,6 +619,13 @@
 										onfocus="this.curVal=this.value;" onblur="if(this.curVal!=this.value){ chkdigit(this); }"/></td>
 									<th><div class="col_title_right">廃番予定日</div></th>
 									<td><html:text styleClass="date_input" styleId="discardDate" property="discardDate" style="width: 140px; ime-mode: disabled;" tabindex="106" /></td>
+								</tr>
+								<tr>
+									<th><div class="col_title_right_req">課税区分<bean:message key='labels.must'/></div></th>
+									<td><html:select tabindex="107" property="taxCategory">
+										<html:options collection="taxCategoryList" property="value"
+											labelProperty="label" />
+									</html:select></td>
 								</tr>
 							</table>
 							<table class="forms" summary="仕入先情報">
@@ -985,6 +992,10 @@
 				<c:forEach var="bean" items="${lengthUnitList}" varStatus="status">
 					<input type="hidden" name="lengthUnitList[${status.index}].value" value="${bean.value}">
 					<input type="hidden" name="lengthUnitList[${status.index}].label" value="${f:h(bean.label)}">
+				</c:forEach>
+				<c:forEach var="bean" items="${taxCategoryList}" varStatus="status">
+					<input type="hidden" name="taxCategoryList[${status.index}].value" value="${bean.value}">
+					<input type="hidden" name="taxCategoryList[${status.index}].label" value="${f:h(bean.label)}">
 				</c:forEach>
 			</s:form>
 

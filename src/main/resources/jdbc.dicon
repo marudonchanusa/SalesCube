@@ -120,12 +120,18 @@
 		<property name="driverClassName">
 			"com.mysql.jdbc.Driver"
 		</property>
-
 		<property name="URL">
 			"jdbc:mysql://localhost:3306/salescube"
 		</property>
 		<property name="user">"salescube"</property>
 		<property name="password">"salescube"</property>
+<!--
+		<property name="URL">
+			"jdbc:mysql://marudonchanusa-server.mysql.database.azure.com:3306/salescube?characterEncoding=UTF-8"
+		</property>
+		<property name="user">"marudonchanusa@marudonchanusa-server"</property>
+		<property name="password">"Marutouya1329"</property>
+-->
 	</component>
 
 	<!-- for SQLServer -->

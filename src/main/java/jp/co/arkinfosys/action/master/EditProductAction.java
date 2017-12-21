@@ -9,6 +9,14 @@ import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
+import org.seasar.framework.beans.util.Beans;
+import org.seasar.struts.annotation.ActionForm;
+import org.seasar.struts.annotation.Execute;
+import org.seasar.struts.util.ActionMessagesUtil;
+
 import jp.co.arkinfosys.common.Categories;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.common.Constants.MENU_ID;
@@ -32,14 +40,6 @@ import jp.co.arkinfosys.service.ProductService;
 import jp.co.arkinfosys.service.RackService;
 import jp.co.arkinfosys.service.SupplierService;
 import jp.co.arkinfosys.service.exception.ServiceException;
-
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.LabelValueBean;
-import org.seasar.framework.beans.util.Beans;
-import org.seasar.struts.annotation.ActionForm;
-import org.seasar.struts.annotation.Execute;
-import org.seasar.struts.util.ActionMessagesUtil;
 
 /**
  * 商品編集画面のアクションクラスです.
@@ -272,8 +272,9 @@ public class EditProductAction extends
 
 		// 商品端数処理
 		this.editProductForm.fractCategory = super.mineDto.productFractCategory;
+
 		// 課税区分
-		this.editProductForm.taxCategory = super.mineDto.taxCategory;
+//		this.editProductForm.taxCategory = super.mineDto.taxCategory;
 		// 商品端数処理
 		this.editProductForm.productFractCategory = super.mineDto.productFractCategory;
 		// 数量小数桁
@@ -353,15 +354,15 @@ public class EditProductAction extends
 
 				// 分類（小）
 				if (StringUtil.hasLength(this.editProductForm.product3)) {
-					
-					
+
+
 					// 画面のプルダウン項目がproduct3Listに既に設定されているのでここでクリア
 					this.editProductForm.product3List.clear();
 
 					this.editProductForm.product3List
 					.addAll(this.productClassService
 							.findAllProductClass3LabelValueBeanList(this.editProductForm.product1,this.editProductForm.product2));
-				
+
 				}
 			}
 		}
@@ -425,6 +426,11 @@ public class EditProductAction extends
 
 		this.editProductForm.product2List.add(0, new LabelValueBean());
 		this.editProductForm.product3List.add(0, new LabelValueBean());
+
+		// 課税区分
+		this.editProductForm.taxCategoryList = this.categoryService
+				.findCategoryLabelValueBeanListById(Categories.TAX_CATEGORY);
+		this.editProductForm.taxCategoryList.add(0, new LabelValueBean());
 	}
 
 	/**

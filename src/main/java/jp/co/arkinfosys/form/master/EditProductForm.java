@@ -6,10 +6,6 @@ package jp.co.arkinfosys.form.master;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.co.arkinfosys.common.CategoryTrns;
-import jp.co.arkinfosys.common.Constants;
-import jp.co.arkinfosys.common.StringUtil;
-
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
@@ -24,6 +20,10 @@ import org.seasar.struts.annotation.Mask;
 import org.seasar.struts.annotation.Maxlength;
 import org.seasar.struts.annotation.Required;
 import org.seasar.struts.util.MessageResourcesUtil;
+
+import jp.co.arkinfosys.common.CategoryTrns;
+import jp.co.arkinfosys.common.Constants;
+import jp.co.arkinfosys.common.StringUtil;
 
 /**
  * 商品画面（登録・編集）のアクションフォームクラスです.
@@ -268,6 +268,8 @@ public class EditProductForm extends AbstractEditForm {
 	public List<LabelValueBean> weightUnitList = new ArrayList<LabelValueBean>();
 	// 長さ
 	public List<LabelValueBean> lengthUnitList = new ArrayList<LabelValueBean>();
+	// 課税区分
+	public List<LabelValueBean> taxCategoryList = new ArrayList<LabelValueBean>();
 
 	/**
 	 * 登録・編集時のバリデートを行います.
@@ -448,6 +450,7 @@ public class EditProductForm extends AbstractEditForm {
 		unitList.clear();
 		weightUnitList.clear();
 		lengthUnitList.clear();
+		taxCategoryList.clear();
 
 		// 初期値を設定する
 		this.stockCtlCategory = CategoryTrns.PRODUCT_STOCK_CTL_NO; // 在庫管理

@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import jp.co.arkinfosys.common.CategoryTrns;
 import jp.co.arkinfosys.common.Constants;
@@ -99,6 +99,7 @@ public class BillAndArtService extends AbstractService {
 		if( CategoryTrns.TAX_SHIFT_CATEGORY_INCLUDE_CTAX.equals(customer.taxShiftCategory)) {
 			// 区分名：税転嫁、区分コード名：内税
 
+			// TODO:請求書の税計算を実装することになりそう
 			// 内税は消費税なし
 //			for( SalesLineTrn sl : salesLineList ){
 //				if( sl.retailPrice != null ){
@@ -188,7 +189,7 @@ public class BillAndArtService extends AbstractService {
 		}else if( CategoryTrns.TAX_CATEGORY_INCLUDED.equals(sl.taxCategory)){
 			// 内税
 			thisPrice =
-				( sl.retailPrice.doubleValue()/( rateBase + sl.ctaxRate.doubleValue() ));
+				( sl.retailPrice.doubleValue()/( rateBase + (sl.ctaxRate.doubleValue()/100) ));
 		}
 		return thisPrice;
 	}
@@ -215,9 +216,9 @@ public class BillAndArtService extends AbstractService {
 		if( CategoryTrns.FLACT_CATEGORY_DOWN.equals( taxFractCategory )){
 			retVal = bd.setScale(0,BigDecimal.ROUND_DOWN).doubleValue();
 		}else if( CategoryTrns.FLACT_CATEGORY_HALF_UP.equals( taxFractCategory )){
-			retVal = bd.setScale(0,BigDecimal.ROUND_UP).doubleValue();
-		}else{
 			retVal = bd.setScale(0,BigDecimal.ROUND_HALF_UP).doubleValue();
+		}else{
+			retVal = bd.setScale(0,BigDecimal.ROUND_UP).doubleValue();
 		}
 		return retVal;
 	}
