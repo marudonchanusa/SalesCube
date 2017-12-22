@@ -105,7 +105,7 @@ public class BillAndArtService extends AbstractService {
 //				if( sl.retailPrice != null ){
 //					// 課税区分を確認
 //					String taxCategory = SalesService.checkTaxCategory(sl.taxCategory);
-//					if( CategoryTrns.TAX_CATEGORY_FREE.equals( taxCategory) ){
+//					if( CategoryTrns.TAX_CATEGORY_FREE.equals( taxCategory) || CategoryTrns.TAX_CATEGORY_NO.equals(sl.taxCategory) ){
 //						// 免税
 //					}else if( CategoryTrns.TAX_CATEGORY_IMPOSITION.equals( taxCategory)){
 //						// 外税
@@ -173,6 +173,32 @@ public class BillAndArtService extends AbstractService {
 	}
 
 	/**
+	 * 請求書に設定する税抜金額（課税対象金額）を取得します。
+	 * @param customer 顧客マスタエンティティ
+	 * @param salesLineList 売上伝票明細行リスト
+	 * @return 税抜金額
+	 */
+	public BigDecimal getTotalForTaxPrice(List<SalesLineTrn> salesLineList) {
+		Double rateBase = 1.0;	// 内税計算用
+		Double thisPrice = 0.0;
+
+		for(SalesLineTrn sl : salesLineList) {
+			// 課税区分を確認
+			if( CategoryTrns.TAX_CATEGORY_FREE.equals(sl.taxCategory)
+					|| CategoryTrns.TAX_CATEGORY_IMPOSITION.equals(sl.taxCategory)
+					|| CategoryTrns.TAX_CATEGORY_NO.equals(sl.taxCategory)){
+				// 非課税、免税、外税
+				thisPrice += sl.retailPrice.doubleValue();
+			}else if( CategoryTrns.TAX_CATEGORY_INCLUDED.equals(sl.taxCategory)){
+				// 内税
+				thisPrice +=
+					( sl.retailPrice.doubleValue()/( rateBase + (sl.ctaxRate.doubleValue()/100) ));
+			}
+		}
+		return new BigDecimal(thisPrice);
+	}
+
+	/**
 	 * 対象明細の課税対象金額を取得します.
 	 * @param sl 売上伝票明細行エンティティ
 	 * @return 課税対象金額
@@ -181,8 +207,8 @@ public class BillAndArtService extends AbstractService {
 		Double rateBase = 1.0;	// 内税計算用
 		Double thisPrice = 0.0;
 		// 課税区分を確認
-		if( CategoryTrns.TAX_CATEGORY_FREE.equals(sl.taxCategory) ){
-			// 免税
+		if( CategoryTrns.TAX_CATEGORY_FREE.equals(sl.taxCategory) || CategoryTrns.TAX_CATEGORY_NO.equals(sl.taxCategory) ){
+			// 免税、非課税
 		}else if( CategoryTrns.TAX_CATEGORY_IMPOSITION.equals(sl.taxCategory)){
 			// 外税
 			thisPrice = sl.retailPrice.doubleValue();

@@ -14,17 +14,21 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
+
+import org.seasar.extension.jdbc.exception.SNonUniqueResultException;
+import org.seasar.framework.beans.util.BeanMap;
+import org.seasar.framework.beans.util.Beans;
+import org.seasar.struts.util.MessageResourcesUtil;
 
 import jp.co.arkinfosys.common.Categories;
 import jp.co.arkinfosys.common.CategoryTrns;
 import jp.co.arkinfosys.common.CodFeeUtil;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.common.DiscountUtil;
-import jp.co.arkinfosys.common.PostageUtil;
 import jp.co.arkinfosys.common.StringUtil;
 import jp.co.arkinfosys.dto.YmDto;
 import jp.co.arkinfosys.dto.rorder.ROrderSlipDto;
@@ -38,17 +42,11 @@ import jp.co.arkinfosys.entity.PickingLine;
 import jp.co.arkinfosys.entity.PickingList;
 import jp.co.arkinfosys.entity.SalesLineTrn;
 import jp.co.arkinfosys.entity.SalesSlipTrn;
-import jp.co.arkinfosys.entity.TaxRate;
 import jp.co.arkinfosys.entity.join.CustomerJoin;
 import jp.co.arkinfosys.entity.join.ProductJoin;
 import jp.co.arkinfosys.s2extend.NumberConverter;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import jp.co.arkinfosys.service.exception.UnabledLockException;
-
-import org.seasar.extension.jdbc.exception.SNonUniqueResultException;
-import org.seasar.framework.beans.util.BeanMap;
-import org.seasar.framework.beans.util.Beans;
-import org.seasar.struts.util.MessageResourcesUtil;
 
 /**
  * 売上伝票サービスクラスです.
@@ -204,8 +202,8 @@ public class SalesService extends
 			gm += tmpGm;
 
 			// 課税区分を確認
-			if (CategoryTrns.TAX_CATEGORY_FREE.equals(lineDto.taxCategory)) {
-				// 免税
+			if (CategoryTrns.TAX_CATEGORY_FREE.equals(lineDto.taxCategory) || CategoryTrns.TAX_CATEGORY_NO.equals(lineDto.taxCategory)) {
+				// 免税、非課税
 			} else if (CategoryTrns.TAX_CATEGORY_IMPOSITION.equals(lineDto.taxCategory)) {
 				// 課税
 				// 税率毎に加算
@@ -1481,8 +1479,8 @@ public class SalesService extends
 			ProductJoin product) throws ServiceException {
 
 		// 課税区分を確認
-		if (CategoryTrns.TAX_CATEGORY_FREE.equals(product.taxCategory)) {
-			// 免税
+		if (CategoryTrns.TAX_CATEGORY_FREE.equals(product.taxCategory)  || CategoryTrns.TAX_CATEGORY_NO.equals(product.taxCategory) ) {
+			// 免税、非課税
 			lineDto.ctaxPrice = "";
 		} else if (CategoryTrns.TAX_CATEGORY_IMPOSITION.equals(product.taxCategory)) {
 			// 課税

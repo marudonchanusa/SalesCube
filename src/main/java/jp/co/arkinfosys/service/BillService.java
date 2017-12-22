@@ -18,6 +18,11 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.struts.action.ActionMessage;
+import org.seasar.framework.beans.util.BeanMap;
+import org.seasar.framework.beans.util.Beans;
+import org.seasar.struts.util.MessageResourcesUtil;
+
 import jp.co.arkinfosys.common.CategoryTrns;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.common.StringUtil;
@@ -33,11 +38,6 @@ import jp.co.arkinfosys.entity.join.DeliveryAndPre;
 import jp.co.arkinfosys.s2extend.NumberConverter;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import jp.co.arkinfosys.service.exception.UnabledLockException;
-
-import org.apache.struts.action.ActionMessage;
-import org.seasar.framework.beans.util.BeanMap;
-import org.seasar.framework.beans.util.Beans;
-import org.seasar.struts.util.MessageResourcesUtil;
 
 /**
  * 請求サービスクラスです.
@@ -521,7 +521,8 @@ public class BillService extends AbstractService<Bill> {
 		// 繰越金額
 		bill.covPrice = bill.lastBillPrice.subtract(bill.depositPrice);
 		// 売上金額
-		bill.salesPrice = billAndArtService.getSalesPrice(salesLineList);
+//		bill.salesPrice = billAndArtService.getSalesPrice(salesLineList);
+		bill.salesPrice = billAndArtService.getTotalForTaxPrice(salesLineList);
 		// 返品金額は未設定
 		// 値引き金額は未設定
 		// その他金額
