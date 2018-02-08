@@ -212,6 +212,8 @@ public final class Constants {
 		public static final String MASTER_CUSTOMER_RANK = "1314";
 		// 銀行マスタ */
 		public static final String MASTER_BANK = "1315";
+		// 顧客別単価マスタ */
+		public static final String MASTER_CUSTOMER_RETAIL_PRICE = "1317";
 		// ファイル参照
 		public static final String REFERENCE_FILES = "1407";
 		// 商品ダウンロード/アップロード
