@@ -9,7 +9,7 @@ package jp.co.arkinfosys.dto.master;
  * @author K.Yoshida
  *
  */
-public class CustomerRetailPriceDto {
+public class CustomerRetailPriceDto implements MasterEditDto {
 
 	public String applyDate;
 
@@ -18,4 +18,8 @@ public class CustomerRetailPriceDto {
 	public String productCode;
 
 	public String retailPrice;
+
+	public String[] getKeys() {
+		return new String[] { this.applyDate, this.customerCode, this.productCode };
+	}
 }

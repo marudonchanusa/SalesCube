@@ -11,7 +11,7 @@ import jp.co.arkinfosys.action.AbstractSearchAction;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.dto.master.CustomerRetailPriceDto;
 import jp.co.arkinfosys.form.AbstractSearchForm;
-import jp.co.arkinfosys.form.master.SearchCustomerRetailPriceActionForm;
+import jp.co.arkinfosys.form.master.SearchCustomerRetailPriceForm;
 import jp.co.arkinfosys.service.exception.ServiceException;
 
 /**
@@ -24,7 +24,7 @@ public class SearchCustomerRetailPriceAction extends
 
 	@ActionForm
 	@Resource
-	public SearchCustomerRetailPriceActionForm searchCustomerRetailPriceActionForm;
+	public SearchCustomerRetailPriceForm searchCustomerRetailPriceForm;
 
 	/**
 	 * @throws ServiceException
@@ -39,7 +39,7 @@ public class SearchCustomerRetailPriceAction extends
 	 * @see jp.co.arkinfosys.action.AbstractSearchAction#getActionForm()
 	 */
 	protected AbstractSearchForm<CustomerRetailPriceDto> getActionForm(){
-		return this.searchCustomerRetailPriceActionForm;
+		return this.searchCustomerRetailPriceForm;
 	}
 
 	/**

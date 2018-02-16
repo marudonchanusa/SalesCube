@@ -10,7 +10,7 @@ import jp.co.arkinfosys.form.AbstractSearchForm;
  * @author K.Yoshida
  *
  */
-public class SearchCustomerRetailPriceActionForm extends AbstractSearchForm<CustomerRetailPriceDto> {
+public class SearchCustomerRetailPriceForm extends AbstractSearchForm<CustomerRetailPriceDto> {
 
 	/** 適用日 */
 	public Date applyDate;

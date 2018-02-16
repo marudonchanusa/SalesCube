@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="ja">
 <head>
-	<title><bean:message key='titles.system'/>　顧客ランクマスタ管理（検索）</title>
+	<title><bean:message key='titles.system'/>　顧客別単価マスタ（検索）</title>
 
 	<%@ include file="/WEB-INF/view/common/header.jsp" %>
 
@@ -11,7 +11,8 @@
 	var paramDataTmp = null;
 
 	function init() {
-
+		// 初期表示時に全件検索
+		execSearch(createData());
 	}
 	function onF1() {
 		initForm();
@@ -29,7 +30,10 @@
 	 * 初期化ボタン押下
 	 */
 	function initForm() {
-
+		// 入力内容を初期化してよろしいですか？
+		if(confirm('<bean:message key="confirm.init" />')){
+			window.location.doHref('${f:url("/master/searchCustomerRetailPrice")}');
+		}
 	}
 
 	function searchCustomerRetailPrice() {
@@ -114,7 +118,7 @@
 	-->
 	</script>
 </head>
-<body>
+<body onhelp="return false;" onload="init()">
 
 <%-- ページヘッダ領域 --%>
 <%@ include file="/WEB-INF/view/common/titlebar.jsp" %>

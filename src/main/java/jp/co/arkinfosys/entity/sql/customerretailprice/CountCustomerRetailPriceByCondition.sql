@@ -1,0 +1,7 @@
+SELECT
+	COUNT(*)
+	FROM
+		CUSTOMER_RETAIL_PRICE_/*$domainId*/
+	/*BEGIN*/
+	WHERE
+	/*END*/
