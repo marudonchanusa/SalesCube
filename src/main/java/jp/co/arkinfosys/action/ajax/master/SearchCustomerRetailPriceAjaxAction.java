@@ -13,6 +13,7 @@ import jp.co.arkinfosys.action.ajax.AbstractSearchResultAjaxAction;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.dto.master.CustomerRetailPriceDto;
 import jp.co.arkinfosys.entity.CustomerRetailPrice;
+import jp.co.arkinfosys.entity.join.CustomerRetailPriceJoin;
 import jp.co.arkinfosys.form.AbstractSearchForm;
 import jp.co.arkinfosys.form.master.SearchCustomerRetailPriceForm;
 import jp.co.arkinfosys.service.CustomerRankService;
@@ -21,7 +22,7 @@ import jp.co.arkinfosys.service.MasterSearch;
 
 
 public class SearchCustomerRetailPriceAjaxAction extends
-		AbstractSearchResultAjaxAction<CustomerRetailPriceDto, CustomerRetailPrice> {
+		AbstractSearchResultAjaxAction<CustomerRetailPriceDto, CustomerRetailPriceJoin> {
 
 	@ActionForm
 	@Resource
@@ -35,7 +36,7 @@ public class SearchCustomerRetailPriceAjaxAction extends
 		return super.doSearch();
 	}
 
-	protected List<CustomerRetailPriceDto> exchange(List<CustomerRetailPrice> entityList)
+	protected List<CustomerRetailPriceDto> exchange(List<CustomerRetailPriceJoin> entityList)
 			throws Exception {
 
 		List<CustomerRetailPriceDto> dtoList = new ArrayList<CustomerRetailPriceDto>();
@@ -75,7 +76,7 @@ public class SearchCustomerRetailPriceAjaxAction extends
 	 * @return {@link CustomerRankService}
 	 */
 	@Override
-	protected MasterSearch<CustomerRetailPrice> getService() {
+	protected MasterSearch<CustomerRetailPriceJoin> getService() {
 		return this.customerRetailPriceService;
 	}
 

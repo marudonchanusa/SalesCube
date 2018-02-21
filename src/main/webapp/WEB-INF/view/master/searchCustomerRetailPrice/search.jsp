@@ -207,18 +207,22 @@
 
 		<table id="search_result" summary="searchResult" class="forms detail_info" style="table-layout: auto; margin-top: 20px;">
 			<colgroup>
-				<col span="1" style="width: 20%">
-				<col span="1" style="width: 20%">
-				<col span="1" style="width: 20%">
-				<col span="1" style="width: 20%">
-				<col span="1" style="width: 20%">
+				<col span="1" style="width: 15%">
+				<col span="1" style="width: 15%">
+				<col span="1" style="width: 15%">
+				<col span="1" style="width: 15%">
+				<col span="1" style="width: 15%">
+				<col span="1" style="width: 15%">
+				<col span="1" style="width: 10%">
 			</colgroup>
 			<tr>
-				<th class="rd_top_left" style="cursor: pointer; height: 30px;" rowspan="2">適用日</th>
-				<th class="xl64" style="cursor: pointer; height: 30px;">顧客コード</th>
-				<th class="xl64" style="cursor: pointer; height: 30px;">顧客名</th>
+				<th class="rd_top_left" style="cursor: pointer; height: 30px;">適用日</th>
+				<th class="xl64" style="cursor: pointer; height: 15px;">顧客コード</th>
+				<th class="xl64" style="cursor: pointer; height: 15px;">顧客名</th>
 				<th class="xl64" style="cursor: pointer; height: 15px;">商品コード</th>
+				<th class="xl64" style="cursor: pointer; height: 15px;">商品名</th>
 				<th class="rd_top_right" style="cursor: pointer">単価</th>
+				<th class="xl64" style="cursor: pointer; height: 15px;">課税区分</th>
 			</tr>
 		</table>
 	</div>

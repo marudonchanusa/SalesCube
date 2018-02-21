@@ -23,4 +23,8 @@ public class CustomerRetailPriceJoin extends CustomerRetailPrice {
 	 */
 	public String productName;
 
+	/**
+	 * 課税区分
+	 */
+	public String taxCategoryName;
 }

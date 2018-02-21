@@ -14,6 +14,7 @@ import jp.co.arkinfosys.common.StringUtil;
 import jp.co.arkinfosys.dto.master.CustomerRetailPriceDto;
 import jp.co.arkinfosys.entity.CustomerRank;
 import jp.co.arkinfosys.entity.CustomerRetailPrice;
+import jp.co.arkinfosys.entity.join.CustomerRetailPriceJoin;
 import jp.co.arkinfosys.service.exception.ServiceException;
 
 /**
@@ -21,8 +22,8 @@ import jp.co.arkinfosys.service.exception.ServiceException;
  * @author K.Yoshida
  *
  */
-public class CustomerRetailPriceService extends AbstractMasterEditService<CustomerRetailPriceDto, CustomerRetailPrice>
-		implements MasterSearch<CustomerRetailPrice>
+public class CustomerRetailPriceService extends AbstractMasterEditService<CustomerRetailPriceDto, CustomerRetailPriceJoin>
+		implements MasterSearch<CustomerRetailPriceJoin>
 		{
 
 	@Resource
@@ -37,7 +38,6 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 		public static final String SORT_ORDER = "sortOrder";
 		public static final String ROW_COUNT = "rowCount";
 		public static final String OFFSET = "offsetRow";
-
 	}
 
 	private static final String COLUMN_APPLY_DATE = "APPLY_DATE";
@@ -100,12 +100,12 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 	 * @see jp.co.arkinfosys.service.MasterSearch#findByConditionLimit(java.util.Map, java.lang.String, boolean, int, int)
 	 */
 	@Override
-	public List<CustomerRetailPrice> findByConditionLimit(
+	public List<CustomerRetailPriceJoin> findByConditionLimit(
 			Map<String, Object> conditions, String sortColumn,
 			boolean sortOrderAsc, int rowCount, int offset)
 			throws ServiceException {
 		if (conditions == null) {
-			return new ArrayList<CustomerRetailPrice>();
+			return new ArrayList<CustomerRetailPriceJoin>();
 		}
 		try {
 			Map<String, Object> param = super.createSqlParam();
@@ -119,7 +119,7 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 				param.put(Param.OFFSET, offset);
 			}
 
-			return this.selectBySqlFile(CustomerRetailPrice.class,
+			return this.selectBySqlFile(CustomerRetailPriceJoin.class,
 					"customerretailprice/FindCustomerRetailPriceByConditionLimit.sql", param)
 					.getResultList();
 		} catch (Exception e) {
@@ -136,9 +136,9 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 	 * @throws ServiceException
 	 * @see jp.co.arkinfosys.service.MasterSearch#findByCondition(java.util.Map, java.lang.String, boolean)
 	 */
-	public List<CustomerRetailPrice> findByCondition(Map<String, Object> conditions,
+	public List<CustomerRetailPriceJoin> findByCondition(Map<String, Object> conditions,
 			String sortColumn, boolean sortOrderAsc) throws ServiceException {
-		return new ArrayList<CustomerRetailPrice>();
+		return new ArrayList<CustomerRetailPriceJoin>();
 	}
 
 	/**
@@ -147,8 +147,8 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 	 * @return マスタ情報
 	 * @throws ServiceException
 	 */
-	public CustomerRetailPrice findById(String id) throws ServiceException {
-		return new CustomerRetailPrice();
+	public CustomerRetailPriceJoin findById(String id) throws ServiceException {
+		return new CustomerRetailPriceJoin();
 	}
 
 	/**

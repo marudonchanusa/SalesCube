@@ -15,9 +15,15 @@ public class CustomerRetailPriceDto implements MasterEditDto {
 
 	public String customerCode;
 
+	public String customerName;
+
 	public String productCode;
 
+	public String productName;
+
 	public String retailPrice;
+
+	public String taxCategoryName;
 
 	public String[] getKeys() {
 		return new String[] { this.applyDate, this.customerCode, this.productCode };
