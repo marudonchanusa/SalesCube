@@ -18,8 +18,12 @@
 		<col span="1" style="width: 10%">
 	</colgroup>
 	<tr>
-		<th class="rd_top_left" style="cursor: pointer; height: 30px;">適用日</th>
-		<th class="xl64" style="cursor: pointer; height: 15px;">顧客コード</th>
+		<th class="rd_top_left" style="cursor: pointer; height: 30px;" onclick="sort('applyDate');">適用日</th>
+			<c:if test="${sortColumn == 'applyDate' }">
+				<c:if test="${sortOrderAsc}">▲</c:if>
+				<c:if test="${!sortOrderAsc}">▼</c:if>
+			</c:if>
+		<th class="xl64" style="cursor: pointer; height: 15px;" onclick="">顧客コード</th>
 		<th class="xl64" style="cursor: pointer; height: 15px;">顧客名</th>
 		<th class="xl64" style="cursor: pointer; height: 15px;">商品コード</th>
 		<th class="xl64" style="cursor: pointer; height: 15px;">商品名</th>

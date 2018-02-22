@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
 	<title><bean:message key='titles.system'/>　顧客別単価マスタ（検索）</title>
-
 	<%@ include file="/WEB-INF/view/common/header.jsp" %>
 
 	<script type="text/javascript">
@@ -23,9 +22,11 @@
 	function onF3() {
 
 	}
+	$(
 	function onF4() {
 
 	}
+	);
 	/**
 	 * 初期化ボタン押下
 	 */
@@ -38,6 +39,41 @@
 
 	function searchCustomerRetailPrice() {
 		return execSearch(createData());
+	}
+
+	//ページ繰り、ソートによる検索処理
+	function goPage(page) {
+		var data = createData();
+		data["pageNo"] = page;
+		return execSearch(data);
+	}
+
+	function sort(itemId) {
+		if($("#sortColumn").attr("value") == itemId) {
+			// 同じ項目の場合は順序を反転する
+			if($("#sortOrderAsc").attr("value") == "true") {
+				$("#sortOrderAsc").attr("value", false);
+			}
+			else {
+				$("#sortOrderAsc").attr("value", true);
+			}
+		}
+		else {
+			$("#sortOrderAsc").attr("value", true);
+		}
+		// ソート列を設定する
+		$("#sortColumn").attr("value", itemId);
+
+		// 1回以上検索しており、前回の結果が1件以上ある場合のみ再検索
+		if(paramDataTmp != null && $("#searchResultCount").val() != "0") {
+			// 前回の検索条件からソート条件のみを変更
+			paramData = paramDataTmp;
+			paramData["pageNo"] = 1;
+			paramData["sortColumn"] = $("#sortColumn").val();
+			paramData["sortOrderAsc"] = $("#sortOrderAsc").val();
+			// 検索
+			return execSearch(paramData);
+		}
 	}
 
 	/**
@@ -196,7 +232,7 @@
 
 	<div style="text-align: right; width: 1160px">
 		<button tabindex="150" onclick="return false" class="btn_medium">初期化</button>
-		<button tabindex="151" onclick="return false" class="btn_medium">検索</button>
+		<button tabindex="151" onclick="searchCustomerRetailPrice()" class="btn_medium">検索</button>
 	</div>
 
 	<div id="ListContainer">
@@ -226,6 +262,8 @@
 			</tr>
 		</table>
 	</div>
+	<html:hidden styleId="sortColumn" property="sortColumn" />
+	<html:hidden styleId="sortOrderAsc" property="sortOrderAsc" />
 
 </s:form>
 </div>

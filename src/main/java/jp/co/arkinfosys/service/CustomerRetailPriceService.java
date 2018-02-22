@@ -31,10 +31,11 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 
 	public static class Param {
 		public static final String APPLY_DATE = "applyDate";
-		public static final String CUSTOMER_CODE = "customerCode";
-		public static final String PRODUCT_CODE = "productCode";
-		public static final String RETAIL_PRICE = "retailPrice";
-		public static final String SORT_COLUMN_CUSTOMER = "sortColumnCustomer";
+		public static final String CUSTOMER_CODE_FROM = "customerCodeFrom";
+		public static final String CUSTOMER_CODE_TO = "customerCodeTo";
+		public static final String PRODUCT_CODE_FROM = "productCodeFrom";
+		public static final String PRODUCT_CODE_TO = "productCodeTo";
+		public static final String SORT_COLUMN_CUSTOMER_RETAIL_PRICE = "sortColumnCustomerRetailPrice";
 		public static final String SORT_ORDER = "sortOrder";
 		public static final String ROW_COUNT = "rowCount";
 		public static final String OFFSET = "offsetRow";
@@ -158,9 +159,11 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 	 */
 	private Map<String, Object> setEmptyCondition(Map<String, Object> param) {
 		param.put(Param.APPLY_DATE, null);
-		param.put(Param.CUSTOMER_CODE, null);
-		param.put(Param.PRODUCT_CODE, null);
-		param.put(Param.SORT_COLUMN_CUSTOMER, null);
+		param.put(Param.CUSTOMER_CODE_FROM, null);
+		param.put(Param.CUSTOMER_CODE_TO, null);
+		param.put(Param.PRODUCT_CODE_FROM, null);
+		param.put(Param.PRODUCT_CODE_TO, null);
+		param.put(Param.SORT_COLUMN_CUSTOMER_RETAIL_PRICE, null);
 		param.put(Param.SORT_ORDER, null);
 		return param;
 	}
@@ -182,23 +185,36 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 			}
 		}
 
-		//顧客コード
-		if (conditions.containsKey(Param.CUSTOMER_CODE)) {
-			param.put(Param.CUSTOMER_CODE, super
-					.createPartialSearchCondition((String) conditions
-							.get(Param.CUSTOMER_CODE)));
+		//顧客コードFrom
+		if (conditions.containsKey(Param.CUSTOMER_CODE_FROM)) {
+			param.put(Param.CUSTOMER_CODE_FROM, (String) conditions
+					.get(Param.CUSTOMER_CODE_FROM));
+
 		}
 
-		//商品コード
-		if (conditions.containsKey(Param.PRODUCT_CODE)) {
-			param.put(Param.PRODUCT_CODE, super
-					.createPartialSearchCondition((String) conditions
-							.get(Param.PRODUCT_CODE)));
+		//顧客コードTo
+		if (conditions.containsKey(Param.CUSTOMER_CODE_TO)) {
+			param.put(Param.CUSTOMER_CODE_TO, (String) conditions
+					.get(Param.CUSTOMER_CODE_TO));
+		}
+
+
+		//商品コードFrom
+		if (conditions.containsKey(Param.PRODUCT_CODE_FROM)) {
+			param.put(Param.PRODUCT_CODE_FROM, (String) conditions
+					.get(Param.PRODUCT_CODE_FROM));
+
+		}
+
+		//商品コードTo
+		if (conditions.containsKey(Param.PRODUCT_CODE_TO)) {
+			param.put(Param.PRODUCT_CODE_TO, (String) conditions
+					.get(Param.PRODUCT_CODE_TO));
 
 		}
 
 		//ソートカラムを設定する
-		param.put(Param.SORT_COLUMN_CUSTOMER, COLUMN_CUSTOMER_CODE);
+		param.put(Param.SORT_COLUMN_CUSTOMER_RETAIL_PRICE, COLUMN_APPLY_DATE);
 
 		//ソートオーダーを設定する
 		if (sortOrderAsc) {

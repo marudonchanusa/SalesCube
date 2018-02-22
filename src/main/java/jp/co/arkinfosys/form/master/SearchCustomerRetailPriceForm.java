@@ -1,6 +1,6 @@
 package jp.co.arkinfosys.form.master;
 
-import java.util.Date;
+import org.seasar.struts.annotation.DateType;
 
 import jp.co.arkinfosys.dto.master.CustomerRetailPriceDto;
 import jp.co.arkinfosys.form.AbstractSearchForm;
@@ -13,7 +13,8 @@ import jp.co.arkinfosys.form.AbstractSearchForm;
 public class SearchCustomerRetailPriceForm extends AbstractSearchForm<CustomerRetailPriceDto> {
 
 	/** 適用日 */
-	public Date applyDate;
+	@DateType(datePatternStrict = "yyyy/MM/dd")
+	public String applyDate;
 
 	/** 顧客コードFrom */
 	public String customerCodeFrom;
