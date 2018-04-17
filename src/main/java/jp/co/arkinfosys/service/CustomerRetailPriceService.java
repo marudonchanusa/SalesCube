@@ -1,6 +1,5 @@
 package jp.co.arkinfosys.service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +7,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.seasar.extension.jdbc.exception.OrderByNotFoundRuntimeException;
+import org.seasar.framework.beans.util.BeanMap;
+import org.seasar.framework.beans.util.Beans;
 
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.common.StringUtil;
@@ -16,20 +17,23 @@ import jp.co.arkinfosys.entity.CustomerRank;
 import jp.co.arkinfosys.entity.CustomerRetailPrice;
 import jp.co.arkinfosys.entity.join.CustomerRetailPriceJoin;
 import jp.co.arkinfosys.service.exception.ServiceException;
+import jp.co.arkinfosys.service.exception.UnabledLockException;
 
 /**
  * 顧客別単価のサービスクラス
+ *
  * @author K.Yoshida
  *
  */
-public class CustomerRetailPriceService extends AbstractMasterEditService<CustomerRetailPriceDto, CustomerRetailPriceJoin>
-		implements MasterSearch<CustomerRetailPriceJoin>
-		{
+public class CustomerRetailPriceService
+		extends AbstractMasterEditService<CustomerRetailPriceDto, CustomerRetailPriceJoin>
+		implements MasterSearch<CustomerRetailPriceJoin> {
 
 	@Resource
 	private SeqMakerService seqMakerService;
 
 	public static class Param {
+		public static final String CUSTOMER_RETAIL_PRICE_ID = "customerRetailPriceId";
 		public static final String APPLY_DATE = "applyDate";
 		public static final String CUSTOMER_CODE_FROM = "customerCodeFrom";
 		public static final String CUSTOMER_CODE_TO = "customerCodeTo";
@@ -50,13 +54,13 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 
 	/**
 	 * 全ての顧客別単価を返します。
+	 *
 	 * @return 顧客別単価のリスト
 	 * @throws ServiceException
 	 */
 	public List<CustomerRetailPrice> findAllCustomerRetailPrice() throws ServiceException {
 		try {
-			return this.selectBySqlFile(CustomerRetailPrice.class,
-					"customerretailprice/FindAllCustomerRetailPrice.sql",
+			return this.selectBySqlFile(CustomerRetailPrice.class, "customerretailprice/FindAllCustomerRetailPrice.sql",
 					super.createSqlParam()).getResultList();
 		} catch (OrderByNotFoundRuntimeException e) {
 			throw new ServiceException(e);
@@ -65,12 +69,13 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 
 	/**
 	 * 検索条件に合致する件数を返します.
-	 * @param conditions 検索条件のマップ
+	 *
+	 * @param conditions
+	 *            検索条件のマップ
 	 * @return 検索結果件数
 	 * @throws ServiceException
 	 */
-	public int countByCondition(Map<String, Object> conditions)
-			throws ServiceException {
+	public int countByCondition(Map<String, Object> conditions) throws ServiceException {
 		if (conditions == null) {
 			return 0;
 		}
@@ -78,11 +83,10 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 			Map<String, Object> param = super.createSqlParam();
 			this.setEmptyCondition(param);
 
-			this.setCondition(conditions,  null, false, param);
+			this.setCondition(conditions, null, false, param);
 
-			return this.selectBySqlFile(Integer.class,
-					"customerretailprice/CountCustomerRetailPriceByCondition.sql", param)
-					.getSingleResult().intValue();
+			return this.selectBySqlFile(Integer.class, "customerretailprice/CountCustomerRetailPriceByCondition.sql",
+					param).getSingleResult().intValue();
 
 		} catch (Exception e) {
 			throw new ServiceException(e);
@@ -91,20 +95,24 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 
 	/**
 	 *
-	 * @param conditions 検索条件のマップ
-	 * @param sortColumn ソートカラム名
-	 * @param sortOrderAsc 昇順にソートするか否か
-	 * @param rowCount 取得件数
-	 * @param offset 取得開始位置
+	 * @param conditions
+	 *            検索条件のマップ
+	 * @param sortColumn
+	 *            ソートカラム名
+	 * @param sortOrderAsc
+	 *            昇順にソートするか否か
+	 * @param rowCount
+	 *            取得件数
+	 * @param offset
+	 *            取得開始位置
 	 * @return {@link CustomerRank}のリスト
 	 * @throws ServiceException
-	 * @see jp.co.arkinfosys.service.MasterSearch#findByConditionLimit(java.util.Map, java.lang.String, boolean, int, int)
+	 * @see jp.co.arkinfosys.service.MasterSearch#findByConditionLimit(java.util.Map,
+	 *      java.lang.String, boolean, int, int)
 	 */
 	@Override
-	public List<CustomerRetailPriceJoin> findByConditionLimit(
-			Map<String, Object> conditions, String sortColumn,
-			boolean sortOrderAsc, int rowCount, int offset)
-			throws ServiceException {
+	public List<CustomerRetailPriceJoin> findByConditionLimit(Map<String, Object> conditions, String sortColumn,
+			boolean sortOrderAsc, int rowCount, int offset) throws ServiceException {
 		if (conditions == null) {
 			return new ArrayList<CustomerRetailPriceJoin>();
 		}
@@ -121,8 +129,7 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 			}
 
 			return this.selectBySqlFile(CustomerRetailPriceJoin.class,
-					"customerretailprice/FindCustomerRetailPriceByConditionLimit.sql", param)
-					.getResultList();
+					"customerretailprice/FindCustomerRetailPriceByConditionLimit.sql", param).getResultList();
 		} catch (Exception e) {
 			throw new ServiceException(e);
 		}
@@ -130,31 +137,27 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 
 	/**
 	 *
-	 * @param conditions 検索条件のマップ
-	 * @param sortColumn ソートカラム名
-	 * @param sortOrderAsc 昇順にソートするか否か
+	 * @param conditions
+	 *            検索条件のマップ
+	 * @param sortColumn
+	 *            ソートカラム名
+	 * @param sortOrderAsc
+	 *            昇順にソートするか否か
 	 * @return {@link CustomerRank}のリスト
 	 * @throws ServiceException
-	 * @see jp.co.arkinfosys.service.MasterSearch#findByCondition(java.util.Map, java.lang.String, boolean)
+	 * @see jp.co.arkinfosys.service.MasterSearch#findByCondition(java.util.Map,
+	 *      java.lang.String, boolean)
 	 */
-	public List<CustomerRetailPriceJoin> findByCondition(Map<String, Object> conditions,
-			String sortColumn, boolean sortOrderAsc) throws ServiceException {
+	public List<CustomerRetailPriceJoin> findByCondition(Map<String, Object> conditions, String sortColumn,
+			boolean sortOrderAsc) throws ServiceException {
 		return new ArrayList<CustomerRetailPriceJoin>();
 	}
 
 	/**
-	 * IDを指定して、マスタ情報を取得します.
-	 * @param id ID
-	 * @return マスタ情報
-	 * @throws ServiceException
-	 */
-	public CustomerRetailPriceJoin findById(String id) throws ServiceException {
-		return new CustomerRetailPriceJoin();
-	}
-
-	/**
 	 * 空の検索条件マップを作成します.
-	 * @param param 検索条件マップ
+	 *
+	 * @param param
+	 *            検索条件マップ
 	 * @return 検索条件キーのみ設定した検索条件マップ
 	 */
 	private Map<String, Object> setEmptyCondition(Map<String, Object> param) {
@@ -170,53 +173,52 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 
 	/**
 	 * 検索条件マップを設定します。
-	 * @param conditions 検索条件値のマップ
-	 * @param sortColumn ソートカラム名
-	 * @param sortOrderAsc 昇順か否か
-	 * @param param 検索条件マップ
+	 *
+	 * @param conditions
+	 *            検索条件値のマップ
+	 * @param sortColumn
+	 *            ソートカラム名
+	 * @param sortOrderAsc
+	 *            昇順か否か
+	 * @param param
+	 *            検索条件マップ
 	 */
-	private void setCondition(Map<String, Object> conditions,
-			String sortColumn, boolean sortOrderAsc, Map<String, Object> param) {
-		//適用年月日
+	private void setCondition(Map<String, Object> conditions, String sortColumn, boolean sortOrderAsc,
+			Map<String, Object> param) {
+		// 適用年月日
 		if (conditions.containsKey(Param.APPLY_DATE)) {
 			if (StringUtil.hasLength((String) conditions.get(Param.APPLY_DATE))) {
-				param.put(Param.APPLY_DATE, (String) conditions
-						.get(Param.APPLY_DATE));
+				param.put(Param.APPLY_DATE, (String) conditions.get(Param.APPLY_DATE));
 			}
 		}
 
-		//顧客コードFrom
+		// 顧客コードFrom
 		if (conditions.containsKey(Param.CUSTOMER_CODE_FROM)) {
-			param.put(Param.CUSTOMER_CODE_FROM, (String) conditions
-					.get(Param.CUSTOMER_CODE_FROM));
+			param.put(Param.CUSTOMER_CODE_FROM, (String) conditions.get(Param.CUSTOMER_CODE_FROM));
 
 		}
 
-		//顧客コードTo
+		// 顧客コードTo
 		if (conditions.containsKey(Param.CUSTOMER_CODE_TO)) {
-			param.put(Param.CUSTOMER_CODE_TO, (String) conditions
-					.get(Param.CUSTOMER_CODE_TO));
+			param.put(Param.CUSTOMER_CODE_TO, (String) conditions.get(Param.CUSTOMER_CODE_TO));
 		}
 
-
-		//商品コードFrom
+		// 商品コードFrom
 		if (conditions.containsKey(Param.PRODUCT_CODE_FROM)) {
-			param.put(Param.PRODUCT_CODE_FROM, (String) conditions
-					.get(Param.PRODUCT_CODE_FROM));
+			param.put(Param.PRODUCT_CODE_FROM, (String) conditions.get(Param.PRODUCT_CODE_FROM));
 
 		}
 
-		//商品コードTo
+		// 商品コードTo
 		if (conditions.containsKey(Param.PRODUCT_CODE_TO)) {
-			param.put(Param.PRODUCT_CODE_TO, (String) conditions
-					.get(Param.PRODUCT_CODE_TO));
+			param.put(Param.PRODUCT_CODE_TO, (String) conditions.get(Param.PRODUCT_CODE_TO));
 
 		}
 
-		//ソートカラムを設定する
+		// ソートカラムを設定する
 		param.put(Param.SORT_COLUMN_CUSTOMER_RETAIL_PRICE, COLUMN_APPLY_DATE);
 
-		//ソートオーダーを設定する
+		// ソートオーダーを設定する
 		if (sortOrderAsc) {
 			param.put(Param.SORT_ORDER, Constants.SQL.ASC);
 		} else {
@@ -226,37 +228,103 @@ public class CustomerRetailPriceService extends AbstractMasterEditService<Custom
 
 	/**
 	 * マスタを登録します.
-	 * @param dto マスタDTO
+	 *
+	 * @param dto
+	 *            マスタDTO
 	 * @throws Exception
 	 */
+	@Override
 	public void insertRecord(CustomerRetailPriceDto dto) throws Exception {
+		if (dto == null) {
+			return;
+		}
+		try {
+			// 顧客別単価の登録
+			Map<String, Object> param = super.createSqlParam();
 
+			long newCustomerRetailPriceId = seqMakerService.nextval(CustomerRetailPrice.TABLE_NAME);
+			dto.customerRetailPriceId = String.valueOf(newCustomerRetailPriceId);
+
+			// データ調整(必要無し)
+
+			BeanMap customerRetailPriceInfo = Beans.createAndCopy(BeanMap.class, dto)
+					.timestampConverter(Constants.FORMAT.TIMESTAMP).dateConverter(Constants.FORMAT.DATE).execute();
+
+			param.putAll(customerRetailPriceInfo);
+			this.updateBySqlFile("customerretailprice/InsertCustomerRetailPrice.sql", param).execute();
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		}
 	}
 
 	/**
 	 * マスタを更新します.
-	 * @param dto マスタDTO
+	 *
+	 * @param dto
+	 *            マスタDTO
 	 * @throws Exception
 	 */
 	public void updateRecord(CustomerRetailPriceDto dto) throws Exception {
+		if (dto == null) {
+			return;
+		}
 
+		// 排他制御
+		Map<String, Object> lockParam = createSqlParam();
+		lockParam.put(Param.CUSTOMER_RETAIL_PRICE_ID, dto.customerRetailPriceId);
+
+		// 排他制御エラー時は例外を発生する
+		lockRecordBySqlFile("customerretailprice/LockCustomerRetailPrice.sql", lockParam, dto.updDatetm);
+
+		// 顧客別単価の更新
+		Map<String, Object> param = super.createSqlParam();
+		BeanMap customerRetailPriceInfo = Beans.createAndCopy(BeanMap.class, dto)
+				.timestampConverter(Constants.FORMAT.TIMESTAMP).dateConverter(Constants.FORMAT.DATE).execute();
+
+		param.putAll(customerRetailPriceInfo);
+		this.updateBySqlFile("customerretailprice/UpdateCustomerRetailPrice.sql", param).execute();
 	}
 
 	/**
 	 * マスタを削除します.
-	 * @param dto マスタDTO
+	 *
+	 * @param dto
+	 *            マスタDTO
 	 * @throws Exception
 	 */
 	public void deleteRecord(CustomerRetailPriceDto dto) throws Exception {
+		try {
+			// 排他制御
+			Map<String, Object> param = super.createSqlParam();
+			param.put(Param.CUSTOMER_RETAIL_PRICE_ID, dto.customerRetailPriceId);
+			this.lockRecordBySqlFile("customerretailprice/LockCustomerRetailPrice.sql", param, dto.updDatetm);
 
+			// 削除
+			param = super.createSqlParam();
+			param.put(Param.CUSTOMER_RETAIL_PRICE_ID, dto.customerRetailPriceId);
+			this.updateBySqlFile("customerretailprice/DeleteCustomerRetailPrice.sql", param).execute();
+		} catch (UnabledLockException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	public CustomerRetailPriceJoin findById(String customerRetailPriceId) throws ServiceException {
+		Map<String, Object> param = super.createSqlParam();
+
+		param.put(Param.CUSTOMER_RETAIL_PRICE_ID, customerRetailPriceId);
+		CustomerRetailPriceJoin result = this.selectBySqlFile(CustomerRetailPriceJoin.class,
+				"customerretailprice/FindCustomerRetailPriceById.sql", param).getSingleResult();
+		return result;
 	}
 
 	/**
 	 *
-	 * @return {APPLY_DATE,CUSTOMER_CODE,PRODUCT_CODE}
+	 * @return {customerRetailPriceId}
 	 */
 	protected String[] getKeyColumnNames() {
-		return new String[] {"APPLY_DATE", "CUSTOMER_CODE", "PRODUCT_CODE"};
+		return new String[] { "CUSTOMER_RETAIL_PRICE_ID" };
 	}
 
 	protected String getTableName() {

@@ -29,6 +29,7 @@
 		<th class="xl64" style="cursor: pointer; height: 15px;">商品名</th>
 		<th class="rd_top_right" style="cursor: pointer">単価</th>
 		<th class="xl64" style="cursor: pointer; height: 15px;">課税区分</th>
+		<th class="rd_top_right" style="cursor: pointer">&nbsp;</th>
 	</tr>
 	<c:forEach var="bean" items="${searchResultList}" varStatus="status">
 	<tr>
@@ -39,6 +40,12 @@
 		<td>${bean.productName}</td>
 		<td>${bean.retailPrice}</td>
 		<td>${bean.taxCategoryName}</td>
+		<td style="text-align: center">
+			<c:if test="${isUpdate}">
+				<button onclick="editCustomerRetailPrice('${bean.customerRetailPriceId}');" class="btn_list_action">編集</button>
+				<button onclick="deleteCustomerRetailPrice('${bean.customerRetailPriceId}','${bean.updDatetm}');" class="btn_list_action">削除</button>
+			</c:if>
+		</td>
 	</tr>
 	</c:forEach>
 </table>

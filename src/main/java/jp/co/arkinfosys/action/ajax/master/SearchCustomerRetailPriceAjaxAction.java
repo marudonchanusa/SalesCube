@@ -41,7 +41,9 @@ public class SearchCustomerRetailPriceAjaxAction extends
 
 		List<CustomerRetailPriceDto> dtoList = new ArrayList<CustomerRetailPriceDto>();
 		for (CustomerRetailPrice entity : entityList) {
-			CustomerRetailPriceDto dto = Beans.createAndCopy(this.getDtoClass(), entity).execute();
+			CustomerRetailPriceDto dto = Beans.createAndCopy(this.getDtoClass(), 
+					entity).timestampConverter(Constants.FORMAT.TIMESTAMP)
+					.dateConverter(Constants.FORMAT.DATE).execute();
 			dtoList.add(dto);
 		}
 

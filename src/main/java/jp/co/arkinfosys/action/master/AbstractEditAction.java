@@ -3,20 +3,19 @@
  */
 package jp.co.arkinfosys.action.master;
 
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.seasar.framework.beans.util.Beans;
+import org.seasar.struts.util.ActionMessagesUtil;
+
 import jp.co.arkinfosys.action.CommonResources;
 import jp.co.arkinfosys.common.Constants;
-import jp.co.arkinfosys.common.StringUtil;
 import jp.co.arkinfosys.dto.master.MasterEditDto;
 import jp.co.arkinfosys.entity.AuditInfo;
 import jp.co.arkinfosys.form.master.AbstractEditForm;
 import jp.co.arkinfosys.service.AbstractMasterEditService;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import jp.co.arkinfosys.service.exception.UnabledLockException;
-
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.seasar.framework.beans.util.Beans;
-import org.seasar.struts.util.ActionMessagesUtil;
 
 /**
  * マスタ編集画面の基底アクションクラスです.
@@ -47,10 +46,10 @@ public abstract class AbstractEditAction<DTOCLASS extends MasterEditDto, ENTITY>
 		AuditInfo record = loadData(key);
 		if (record != null) {
 			setForm(record);
-			
+
 			form.creDatetmShow = this.getActionForm().creDatetm;
 			form.updDatetmShow = this.getActionForm().updDatetm;
-			
+
 			//form.creDatetmShow = StringUtil.getDateString(Constants.FORMAT.DATE, record.creDatetm);
 			//form.updDatetmShow = StringUtil.getDateString(Constants.FORMAT.DATE, record.updDatetm);
 		}

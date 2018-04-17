@@ -11,6 +11,8 @@ package jp.co.arkinfosys.dto.master;
  */
 public class CustomerRetailPriceDto implements MasterEditDto {
 
+	public String customerRetailPriceId;
+
 	public String applyDate;
 
 	public String customerCode;
@@ -25,7 +27,9 @@ public class CustomerRetailPriceDto implements MasterEditDto {
 
 	public String taxCategoryName;
 
+	public String updDatetm;
+
 	public String[] getKeys() {
-		return new String[] { this.applyDate, this.customerCode, this.productCode };
+		return new String[] { this.customerRetailPriceId };
 	}
 }

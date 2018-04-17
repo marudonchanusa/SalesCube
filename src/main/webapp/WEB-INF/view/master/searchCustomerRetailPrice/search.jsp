@@ -20,13 +20,11 @@
 		searchCustomerRetailPrice();
 	}
 	function onF3() {
-
+		addCustomerRetailPrice();
 	}
-	$(
 	function onF4() {
-
+		deleteCustomerRetailPrice();
 	}
-	);
 	/**
 	 * 初期化ボタン押下
 	 */
@@ -39,6 +37,25 @@
 
 	function searchCustomerRetailPrice() {
 		return execSearch(createData());
+	}
+
+	function deleteCustomerRetailPrice(customerRetailPriceId,updDatetm) {
+		if (!confirm('<bean:message key="confirm.delete" />')){
+			return;
+		}
+
+		// 削除実行
+		asyncRequest(
+			"${f:url("/ajax/master/deleteCustomerRetailPriceAjax/delete")}",
+			{
+				"customerRetailPriceId": customerRetailPriceId,
+				"updDatetm": updDatetm
+			},
+			function() {
+				var data = createData(true);
+				return execSearch(data);
+			}
+		);
 	}
 
 	//ページ繰り、ソートによる検索処理
@@ -74,6 +91,16 @@
 			// 検索
 			return execSearch(paramData);
 		}
+	}
+
+	// 追加
+	function addCustomerRetailPrice() {
+		window.location.doHref("${f:url("/master/editCustomerRetailPrice/")}");
+	}
+
+	// 編集
+	function editCustomerRetailPrice(customerRetailPriceId) {
+		window.location.doHref("${f:url("/master/editCustomerRetailPrice/edit/")}" + customerRetailPriceId);
 	}
 
 	/**
@@ -176,7 +203,7 @@
         <button disabled="disabled">F3<br>追加</button>
 </c:if>
 <c:if test="${isUpdate}">
-        <button tabindex="2002" onclick="return false">F3<br>追加</button>
+        <button tabindex="2002" onclick="addCustomerRetailPrice();">F3<br>追加</button>
 </c:if>
 <c:if test="${isUpdate}">
         <button tabindex="2003" onclick="return false">F4<br><bean:message key='words.name.excel'/></button>
@@ -243,12 +270,13 @@
 
 		<table id="search_result" summary="searchResult" class="forms detail_info" style="table-layout: auto; margin-top: 20px;">
 			<colgroup>
+				<col span="1" style="width: 10%">
 				<col span="1" style="width: 15%">
 				<col span="1" style="width: 15%">
 				<col span="1" style="width: 15%">
 				<col span="1" style="width: 15%">
-				<col span="1" style="width: 15%">
-				<col span="1" style="width: 15%">
+				<col span="1" style="width: 10%">
+				<col span="1" style="width: 10%">
 				<col span="1" style="width: 10%">
 			</colgroup>
 			<tr>
@@ -259,6 +287,7 @@
 				<th class="xl64" style="cursor: pointer; height: 15px;">商品名</th>
 				<th class="rd_top_right" style="cursor: pointer">単価</th>
 				<th class="xl64" style="cursor: pointer; height: 15px;">課税区分</th>
+				<th class="rd_top_right" style="cursor: pointer">&nbsp;</th>
 			</tr>
 		</table>
 	</div>
