@@ -2,18 +2,25 @@ package jp.co.arkinfosys.action.master;
 
 import javax.annotation.Resource;
 
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
+import org.seasar.struts.util.ActionMessagesUtil;
 
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.dto.master.CustomerRetailPriceDto;
 import jp.co.arkinfosys.entity.AuditInfo;
+import jp.co.arkinfosys.entity.Customer;
 import jp.co.arkinfosys.entity.CustomerRetailPrice;
+import jp.co.arkinfosys.entity.Product;
 import jp.co.arkinfosys.entity.join.CustomerRetailPriceJoin;
 import jp.co.arkinfosys.form.master.AbstractEditForm;
 import jp.co.arkinfosys.form.master.EditCustomerRetailPriceForm;
 import jp.co.arkinfosys.service.AbstractMasterEditService;
 import jp.co.arkinfosys.service.CustomerRetailPriceService;
+import jp.co.arkinfosys.service.CustomerService;
+import jp.co.arkinfosys.service.ProductService;
 import jp.co.arkinfosys.service.exception.ServiceException;
 
 /**
@@ -32,7 +39,14 @@ public class EditCustomerRetailPriceAction extends
 	@Resource
 	public EditCustomerRetailPriceForm editCustomerRetailPriceForm;
 
+	@Resource
 	public CustomerRetailPriceService customerRetailPriceService;
+
+	@Resource
+	public CustomerService customerService;
+
+	@Resource
+	public ProductService productService;
 
 	/**
 	 * 新規登録時の初期化処理を行います。
@@ -67,6 +81,28 @@ public class EditCustomerRetailPriceAction extends
 	@Execute(validator = true, validate = "validate", input = "index", stopOnValidationError = false)
 	public String insert() throws Exception {
 		initList();
+		if(this.editCustomerRetailPriceForm.customerCode != "") {
+			//存在しない顧客コードの場合エラーとする
+			Customer customer = this.customerService.findById(this.editCustomerRetailPriceForm.customerCode);
+			if (customer == null) {
+				super.messages.add(ActionMessages.GLOBAL_MESSAGE,
+						new ActionMessage("errors.customer.not.exist.code"));
+			}
+		}
+		if (this.editCustomerRetailPriceForm.productCode != "") {
+			//存在しない商品コードの場合エラーとする
+			Product product = this.productService.findById(this.editCustomerRetailPriceForm.productCode);
+			if (product == null) {
+				super.messages.add(ActionMessages.GLOBAL_MESSAGE,
+						new ActionMessage("errors.dispProductPrice.none.productCode"));
+			}
+		}
+
+		if (super.messages.size() > 0) {
+			ActionMessagesUtil.addErrors(super.httpRequest, super.messages);
+			return EditCustomerRetailPriceAction.Mapping.INPUT;
+		}
+
 		return doInsert();
 	}
 
@@ -78,6 +114,30 @@ public class EditCustomerRetailPriceAction extends
 	 */
 	@Execute(validator = true, validate = "validate", input = "initEdit", stopOnValidationError = false)
 	public String update() throws Exception {
+		initList();
+		if(this.editCustomerRetailPriceForm.customerCode != "") {
+			//存在しない顧客コードの場合エラーとする
+			Customer customer = this.customerService.findById(this.editCustomerRetailPriceForm.customerCode);
+			if (customer == null) {
+				super.messages.add(ActionMessages.GLOBAL_MESSAGE,
+						new ActionMessage("errors.customer.not.exist.code"));
+			}
+		}
+		if (this.editCustomerRetailPriceForm.productCode != "") {
+			//存在しない商品コードの場合エラーとする
+			Product product = this.productService.findById(this.editCustomerRetailPriceForm.productCode);
+			if (product == null) {
+				super.messages.add(ActionMessages.GLOBAL_MESSAGE,
+						new ActionMessage("errors.dispProductPrice.none.productCode"));
+			}
+		}
+
+		if (super.messages.size() > 0) {
+			ActionMessagesUtil.addErrors(super.httpRequest, super.messages);
+			this.editCustomerRetailPriceForm.editMode = true;
+			return EditCustomerRetailPriceAction.Mapping.INPUT;
+		}
+
 		return doUpdate();
 	}
 
@@ -161,6 +221,27 @@ public class EditCustomerRetailPriceAction extends
 	protected AuditInfo loadData(String key) throws ServiceException {
 		CustomerRetailPrice result = this.customerRetailPriceService.findById(key);
 		return result;
+	}
+
+	/**
+	 *
+	 * @param record {@link Customer}
+	 * @throws ServiceException
+	 * @see jp.co.arkinfosys.action.master.AbstractEditAction#setForm(jp.co.arkinfosys.entity.AuditInfo)
+	 */
+	@Override
+	protected void setForm(AuditInfo record) throws ServiceException {
+		super.setForm(record);
+
+		//端数処理
+		this.editCustomerRetailPriceForm.priceFractCategory = super.mineDto.priceFractCategory;
+
+		//単価少数桁
+		this.editCustomerRetailPriceForm.unitPriceDecAlignment = "0";
+
+		//外貨少数桁
+		this.editCustomerRetailPriceForm.dolUnitPriceDecAlignment = String
+				.valueOf(super.mineDto.unitPriceDecAlignment);
 	}
 
 	@Override

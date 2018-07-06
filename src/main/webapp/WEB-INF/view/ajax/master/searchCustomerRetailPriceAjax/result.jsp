@@ -38,7 +38,7 @@
 		<td>${bean.customerName}</td>
 		<td>${bean.productCode}</td>
 		<td>${bean.productName}</td>
-		<td>${bean.retailPrice}</td>
+		<td><fmt:formatNumber value='${bean.retailPrice}' pattern="###,###" /></td>
 		<td>${bean.taxCategoryName}</td>
 		<td style="text-align: center">
 			<c:if test="${isUpdate}">

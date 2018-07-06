@@ -9,10 +9,7 @@
 	<!--
 
 	$(function() {
-		//applyPriceAlignment();
-		//applyQuantityAlignment($(".BDCqua"));
-		//applyStatsAlignment($(".BDCrate"));
-		//applyCUnitSign();
+		applyPriceAlignment();
 	});
 
     // ファンクションキーとのマッピング
@@ -102,6 +99,42 @@
 		);
 	}
 
+	/**
+	 * 顧客検索ダイアログを開く
+	 */
+	function customerSearch(jqObject) {
+		var dialogId = jqObject.attr("id") + "Dialog";
+		openSearchCustomerDialog(
+			dialogId,
+			function(id, map) {
+				$("#customerCode").val( map[ "customerCode" ] );
+				$("#customerName").val( map[ "customerName" ] );
+			}
+		);
+
+		// ダイアログのフィールドに値をセットしてフォーカス
+		$("#" + dialogId + "_customerCode").val( jqObject.val() );
+		$("#" + dialogId + "_customerCode").focus();
+	}
+
+	/**
+	* 商品検索ダイアログを開く
+	*/
+	function productSearch(jqObject) {
+		var dialogId = jqObject.attr("id") + "Dialog";
+		openSearchProductDialog(
+			dialogId,
+			function(id, map) {
+				$("#productCode").val( map[ "productCode" ] );
+				$("#productName").val( map[ "productName" ] );
+			}
+		);
+
+		// ダイアログのフィールドに値をセットしてフォーカス
+		$("#" + dialogId + "_productCode").val( jqObject.val() );
+		$("#" + dialogId + "_productCode").focus();
+	}
+
 	-->
 	</script>
 </head>
@@ -179,15 +212,19 @@
 					<table id="user_info" class="forms" summary="顧客別単価情報" style="width: 600px">
 						<tr>
 							<th><div class="col_title_right">適用日</div></th>
-							<td><html:text property="applyDate" styleId="applyDate" style="width: 135px; ime-mode: disabled;" styleClass="date_input" tabindex="100" /></td>
+							<td><html:text property="applyDate" styleId="applyDate" style="width: 135px; ime-mode: disabled;" styleClass="date_input" tabindex="100"
+										readonly="${editMode || !isUpdate}"/></td>
 						</tr>
 						<tr>
 							<th><div class="col_title_right">顧客コード</div></th>
-							<td><html:text styleId="customerCode" property="customerCode" style="width: 100px"  tabindex="101"
+							<td><html:text styleId="customerCode" property="customerCode" style="width: 100px"  tabindex="101" readonly="${editMode || !isUpdate}"
 								onfocus="this.curVal=this.value;" onblur="if(this.curVal!=this.value){ changeCustomerCode(this); }"/>
+
+								<c:if test="${!editMode}">
 								<html:image src="${f:url('/images//customize/btn_search.png')}"
 									style="vertical-align: middle; cursor: pointer;" tabindex="102"
-									onclick="customerSearch()" />
+									onclick="customerSearch($('#customerCode'));" />
+								</c:if>
 							</td>
 							<th><div class="col_title_right">顧客名</div></th>
 							<td>
@@ -196,11 +233,14 @@
 						</tr>
 						<tr>
 							<th><div class="col_title_right">商品コード</div></th>
-							<td><html:text styleId="productCode" property="productCode" style="width: 100px"  tabindex="104"
+							<td><html:text styleId="productCode" property="productCode" style="width: 100px"  tabindex="104" readonly="${editMode || !isUpdate}"
 								onfocus="this.curVal=this.value;" onblur="if(this.curVal!=this.value){ changeProductCode(this); }"/>
+
+								<c:if test="${!editMode}">
 								<html:image src="${f:url('/images//customize/btn_search.png')}"
 									style="vertical-align: middle; cursor: pointer;" tabindex="105"
-									onclick="productSearch()" />
+									onclick="productSearch($('#productCode'));" />
+								</c:if>
 							</td>
 							<th><div class="col_title_right">商品名</div></th>
 							<td>
@@ -245,6 +285,9 @@
 		</div>
 	</div>
 </div>
+<html:hidden styleId="priceFractCategory" property="priceFractCategory"/>
+<html:hidden styleId="unitPriceDecAlignment" property="unitPriceDecAlignment"/>
+<html:hidden styleId="dolUnitPriceDecAlignment" property="dolUnitPriceDecAlignment"/>
 <html:hidden property="customerRetailPriceId"/>
 <html:hidden property="updDatetm"/>
 </s:form>

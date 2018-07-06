@@ -38,12 +38,24 @@ public class EditCustomerRetailPriceForm extends AbstractEditForm {
 	@DoubleRange(min="-999999999", max="999999999", arg0 = @Arg(key = "labels.retailPrice2", resource = true))
 	public String retailPrice;
 
+	/** 単価端数処理 */
+	public String priceFractCategory;
+
+	/** 単価小数桁 */
+	public String unitPriceDecAlignment;
+
+	/** 外貨単価小数桁 */
+	public String dolUnitPriceDecAlignment;
+
 	@Override
 	public void initialize() {
 		applyDate = "";
 		customerCode = "";
 		productCode = "";
 		retailPrice = "";
+		priceFractCategory = "";
+		unitPriceDecAlignment = "";
+		dolUnitPriceDecAlignment = "";
 	}
 
 	/**
@@ -72,7 +84,7 @@ public class EditCustomerRetailPriceForm extends AbstractEditForm {
 		checkRequired(customerCode, labelCustomerCode, errors);
 
 		//商品コード
-		checkRequired(productCode, labelCustomerCode, errors);
+		checkRequired(productCode, labelProductCode, errors);
 
 		//売価
 		checkRequired(retailPrice, labelRetailPrice, errors);
