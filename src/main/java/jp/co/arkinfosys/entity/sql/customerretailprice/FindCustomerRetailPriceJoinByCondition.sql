@@ -27,17 +27,11 @@ WHERE
 	/*IF applyDate != null*/
 	PRICE.APPLY_DATE = /*applyDate*/
 	/*END*/
-	/*IF customerCodeFrom != null*/
-	AND PRICE.CUSTOMER_CODE >= /*customerCodeFrom*/
+	/*IF customerCode != null*/
+	AND PRICE.CUSTOMER_CODE = /*customerCode*/
 	/*END*/
-	/*IF customerCodeTo != null*/
-	AND PRICE.CUSTOMER_CODE <= /*customerCodeTo*/
-	/*END*/
-	/*IF productCodeFrom != null*/
-	AND PRICE.PRODUCT_CODE >= /*productCodeFrom*/
-	/*END*/
-	/*IF productCodeTo != null*/
-	AND PRICE.PRODUCT_CODE <= /*productCodeTo*/
+	/*IF productCode != null*/
+	AND PRICE.PRODUCT_CODE = /*productCode*/
 	/*END*/
 /*END*/
 /*BEGIN*/

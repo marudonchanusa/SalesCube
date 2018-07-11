@@ -1,9 +1,13 @@
 package jp.co.arkinfosys.action.master;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.seasar.framework.beans.util.BeanMap;
+import org.seasar.framework.beans.util.Beans;
 import org.seasar.struts.annotation.ActionForm;
 import org.seasar.struts.annotation.Execute;
 import org.seasar.struts.util.ActionMessagesUtil;
@@ -97,6 +101,15 @@ public class EditCustomerRetailPriceAction extends
 						new ActionMessage("errors.dispProductPrice.none.productCode"));
 			}
 		}
+		// 検索条件を取得
+		BeanMap params = Beans.createAndCopy(BeanMap.class, getActionForm())
+				.excludesWhitespace().lrTrim().execute();
+
+		if (this.customerRetailPriceService.findByCondition(params, "", true).size() > 0) {
+			//既に同適用年月日、顧客コード、商品コードの単価が存在する場合エラーとする
+			super.messages.add(ActionMessages.GLOBAL_MESSAGE,
+					new ActionMessage("errors.customerretailprice.already.exists"));
+		}
 
 		if (super.messages.size() > 0) {
 			ActionMessagesUtil.addErrors(super.httpRequest, super.messages);
@@ -177,7 +190,7 @@ public class EditCustomerRetailPriceAction extends
 	}
 
 	/**
-	 * 自動発番のため、使用しません.
+	 * 自動キー発行なので使わない
 	 * @return null
 	 * @see jp.co.arkinfosys.action.master.AbstractEditAction#getAlreadyExistsErrorKey()
 	 */
@@ -185,6 +198,18 @@ public class EditCustomerRetailPriceAction extends
 	protected String getAlreadyExistsErrorKey() {
 		// 自動発番なので使わない
 		return null;
+	}
+
+	/**
+	 * 同じ適用年月日、顧客コード、商品コードの顧客別単価があるかチェック
+	 * @return
+	 */
+	private List getAlreadyExists() {
+		// 検索条件を取得
+		BeanMap params = Beans.createAndCopy(BeanMap.class, getActionForm())
+				.excludesWhitespace().lrTrim().execute();
+
+		return this.customerRetailPriceService.findByCondition(params);
 	}
 
 	/**

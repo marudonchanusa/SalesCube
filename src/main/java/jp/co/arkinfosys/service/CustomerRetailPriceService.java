@@ -35,8 +35,10 @@ public class CustomerRetailPriceService
 	public static class Param {
 		public static final String CUSTOMER_RETAIL_PRICE_ID = "customerRetailPriceId";
 		public static final String APPLY_DATE = "applyDate";
+		public static final String CUSTOMER_CODE = "customerCode";
 		public static final String CUSTOMER_CODE_FROM = "customerCodeFrom";
 		public static final String CUSTOMER_CODE_TO = "customerCodeTo";
+		public static final String PRODUCT_CODE = "productCode";
 		public static final String PRODUCT_CODE_FROM = "productCodeFrom";
 		public static final String PRODUCT_CODE_TO = "productCodeTo";
 		public static final String SORT_COLUMN_CUSTOMER_RETAIL_PRICE = "sortColumnCustomerRetailPrice";
@@ -136,24 +138,6 @@ public class CustomerRetailPriceService
 	}
 
 	/**
-	 *
-	 * @param conditions
-	 *            検索条件のマップ
-	 * @param sortColumn
-	 *            ソートカラム名
-	 * @param sortOrderAsc
-	 *            昇順にソートするか否か
-	 * @return {@link CustomerRank}のリスト
-	 * @throws ServiceException
-	 * @see jp.co.arkinfosys.service.MasterSearch#findByCondition(java.util.Map,
-	 *      java.lang.String, boolean)
-	 */
-	public List<CustomerRetailPriceJoin> findByCondition(Map<String, Object> conditions, String sortColumn,
-			boolean sortOrderAsc) throws ServiceException {
-		return new ArrayList<CustomerRetailPriceJoin>();
-	}
-
-	/**
 	 * 空の検索条件マップを作成します.
 	 *
 	 * @param param
@@ -162,8 +146,10 @@ public class CustomerRetailPriceService
 	 */
 	private Map<String, Object> setEmptyCondition(Map<String, Object> param) {
 		param.put(Param.APPLY_DATE, null);
+		param.put(Param.CUSTOMER_CODE, null);
 		param.put(Param.CUSTOMER_CODE_FROM, null);
 		param.put(Param.CUSTOMER_CODE_TO, null);
+		param.put(Param.PRODUCT_CODE, null);
 		param.put(Param.PRODUCT_CODE_FROM, null);
 		param.put(Param.PRODUCT_CODE_TO, null);
 		param.put(Param.SORT_COLUMN_CUSTOMER_RETAIL_PRICE, null);
@@ -192,6 +178,11 @@ public class CustomerRetailPriceService
 			}
 		}
 
+		// 顧客コード
+		if (conditions.containsKey(Param.CUSTOMER_CODE)) {
+			param.put(Param.APPLY_DATE, (String) conditions.get(Param.CUSTOMER_CODE));
+		}
+
 		// 顧客コードFrom
 		if (conditions.containsKey(Param.CUSTOMER_CODE_FROM)) {
 			param.put(Param.CUSTOMER_CODE_FROM, (String) conditions.get(Param.CUSTOMER_CODE_FROM));
@@ -201,6 +192,11 @@ public class CustomerRetailPriceService
 		// 顧客コードTo
 		if (conditions.containsKey(Param.CUSTOMER_CODE_TO)) {
 			param.put(Param.CUSTOMER_CODE_TO, (String) conditions.get(Param.CUSTOMER_CODE_TO));
+		}
+
+		// 商品コード
+		if (conditions.containsKey(Param.PRODUCT_CODE)) {
+			param.put(Param.PRODUCT_CODE, (String) conditions.get(Param.PRODUCT_CODE));
 		}
 
 		// 商品コードFrom
@@ -329,5 +325,27 @@ public class CustomerRetailPriceService
 
 	protected String getTableName() {
 		return CustomerRetailPrice.TABLE_NAME;
+	}
+
+	/**
+	 *検索条件で顧客別単価を検索
+	 */
+	public List<CustomerRetailPriceJoin> findByCondition(Map<String, Object> conditions, String sortColumn,
+			boolean sortOrderAsc) throws ServiceException {
+
+		if (conditions == null) {
+			return new ArrayList<CustomerRetailPriceJoin>();
+		}
+		try {
+			Map<String, Object> param = super.createSqlParam();
+			this.setEmptyCondition(param);
+
+			this.setCondition(conditions, "", true, param);
+
+			return this.selectBySqlFile(CustomerRetailPriceJoin.class,
+					"customerretailprice/FindCustomerRetailPriceJoinByCondition.sql", conditions).getResultList();
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		}
 	}
 }
