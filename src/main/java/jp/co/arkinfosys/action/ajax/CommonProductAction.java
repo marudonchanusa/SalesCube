@@ -9,6 +9,11 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.seasar.framework.beans.util.BeanMap;
+import org.seasar.struts.annotation.ActionForm;
+import org.seasar.struts.annotation.Execute;
+import org.seasar.struts.util.ResponseUtil;
+
 import jp.co.arkinfosys.action.ajax.dialog.ShowStockInfoDialogAction;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.common.StringUtil;
@@ -21,11 +26,6 @@ import jp.co.arkinfosys.service.ProductService;
 import jp.co.arkinfosys.service.ProductStockService;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import net.arnx.jsonic.JSON;
-
-import org.seasar.framework.beans.util.BeanMap;
-import org.seasar.struts.annotation.ActionForm;
-import org.seasar.struts.annotation.Execute;
-import org.seasar.struts.util.ResponseUtil;
 
 /**
  * 商品情報を取得するアクションクラスです.
@@ -100,8 +100,19 @@ public class CommonProductAction extends CommonAjaxResources {
 		int movableQuantity;
 		try {
 
-			product = productService
-					.findById(commonProductForm.productCode);
+			//顧客コードと適用年月日がセットされている場合、商品取得方法を切り替える
+			if (!commonProductForm.applyDate.isEmpty() &&
+					!commonProductForm.customerCode.isEmpty()) {
+
+				product = productService
+						.findByCustomerRetailPriceCondition(commonProductForm.productCode,
+															commonProductForm.customerCode,
+															commonProductForm.applyDate);
+			} else {
+				product = productService
+						.findById(commonProductForm.productCode);
+
+			}
 			this.stockInfoDto = this.productStockService
 					.calcStockQuantityByProductCode(commonProductForm.productCode);
 

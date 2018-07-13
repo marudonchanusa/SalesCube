@@ -180,7 +180,7 @@ public class CustomerRetailPriceService
 
 		// 顧客コード
 		if (conditions.containsKey(Param.CUSTOMER_CODE)) {
-			param.put(Param.APPLY_DATE, (String) conditions.get(Param.CUSTOMER_CODE));
+			param.put(Param.CUSTOMER_CODE, (String) conditions.get(Param.CUSTOMER_CODE));
 		}
 
 		// 顧客コードFrom
@@ -343,7 +343,7 @@ public class CustomerRetailPriceService
 			this.setCondition(conditions, "", true, param);
 
 			return this.selectBySqlFile(CustomerRetailPriceJoin.class,
-					"customerretailprice/FindCustomerRetailPriceJoinByCondition.sql", conditions).getResultList();
+					"customerretailprice/FindCustomerRetailPriceJoinByCondition.sql", param).getResultList();
 		} catch (Exception e) {
 			throw new ServiceException(e);
 		}

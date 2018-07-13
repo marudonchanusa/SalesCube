@@ -20,4 +20,14 @@ public class CommonProductForm {
 	 */
 	public String rackCode;
 
+	/**
+	 * 適用年月日
+	 */
+	public String applyDate;
+
+	/**
+	 * 顧客コード
+	 */
+	public String customerCode;
+
 }

@@ -17,6 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.seasar.framework.beans.ConverterRuntimeException;
+import org.seasar.framework.beans.IllegalPropertyRuntimeException;
+import org.seasar.framework.beans.util.BeanMap;
+import org.seasar.framework.beans.util.Beans;
+import org.seasar.struts.util.MessageResourcesUtil;
+
 import jp.co.arkinfosys.common.Categories;
 import jp.co.arkinfosys.common.CategoryTrns;
 import jp.co.arkinfosys.common.Constants;
@@ -32,14 +40,6 @@ import jp.co.arkinfosys.s2extend.NumberConverter;
 import jp.co.arkinfosys.service.exception.FileImportException;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import jp.co.arkinfosys.service.exception.UnabledLockException;
-
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.seasar.framework.beans.ConverterRuntimeException;
-import org.seasar.framework.beans.IllegalPropertyRuntimeException;
-import org.seasar.framework.beans.util.BeanMap;
-import org.seasar.framework.beans.util.Beans;
-import org.seasar.struts.util.MessageResourcesUtil;
 
 /**
  * 商品サービスクラスです.
@@ -241,6 +241,12 @@ public class ProductService extends
 		private static final String YM = "yearMonth";
 
 		private static final String SALES_STANDARD_DEVIATION = "salesStandardDeviation";
+
+		// 顧客別単価を取得する為に追加
+		private static final String APPLY_DATE = "applyDate";
+
+		private static final String CUSTOMER_CODE = "customerCode";
+
 	}
 
 	/**
@@ -262,6 +268,32 @@ public class ProductService extends
 
 			return this.selectBySqlFile(ProductJoin.class,
 					"product/FindProductByCode.sql", param).getSingleResult();
+		} catch (Exception e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	/**
+	 *
+	 * @param productCode 商品コード
+	 * @param customerCode 顧客コード
+	 * @param applyDate 日付
+	 * @return
+	 * @throws ServiceException
+	 */
+	public ProductJoin findByCustomerRetailPriceCondition(String productCode, String customerCode, String applyDate) throws ServiceException {
+		try {
+			// SQLパラメータを構築する
+			Map<String, Object> param = super.createSqlParam();
+			this.setEmptyCondition(param);
+			param.put(ProductService.Param.PRODUCT_CODE, productCode);
+			param.put(ProductService.Param.CUSTOMER_CODE, customerCode);
+			param.put(ProductService.Param.APPLY_DATE, applyDate);
+
+			this.setConditionCategoryId(param);
+
+			return this.selectBySqlFile(ProductJoin.class,
+					"product/FindProductByCustomerRetailPriceCondition.sql", param).getSingleResult();
 		} catch (Exception e) {
 			throw new ServiceException(e);
 		}
@@ -774,6 +806,10 @@ public class ProductService extends
 		param.put(ProductService.Param.STOCK_CTL_CATEGORY, null);
 		param.put(ProductService.Param.RACK_MULTI_FLAG, null);
 		param.put(ProductService.Param.HOLDING_STOCK_LESS_THAN_PO_NUM, null);
+
+		//顧客別単価を取得する為に追加
+		param.put(ProductService.Param.CUSTOMER_CODE, null);
+		param.put(ProductService.Param.APPLY_DATE, null);
 		return param;
 	}
 
@@ -1270,22 +1306,22 @@ public class ProductService extends
 								AbstractService.Param.UPD_FUNC,
 								AbstractService.Param.UPD_DATETM,
 								AbstractService.Param.UPD_USER).execute());
-				 
+
 				if (p == null) {
 					// 新規：Excelで取り込んだデータがDBに存在しない場合は商品を登録する
 					count += super.updateBySqlFile("product/InsertProduct.sql",
 							param).execute();
-					
+
 					// 新規登録した商品を取得する
 					param = super.createSqlParam();
 					this.setEmptyCondition(param);
 					param.put(Param.PRODUCT_CODE, product.productCode);
 					this.setConditionCategoryId(param);
-					
+
 					p = super.selectBySqlFile(ProductJoin.class,
 							"product/FindProductByCodeAfterLock.sql", param)
 							.getSingleResult();
-					
+
 				} else {
 					// 更新
 					count += super.updateBySqlFile("product/UpdateProduct.sql",

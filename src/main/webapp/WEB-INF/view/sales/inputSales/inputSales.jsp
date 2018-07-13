@@ -1187,6 +1187,8 @@
 
 		var data = new Object();
 		data["productCode"] = $("#salesLineList\\["+index+"\\]\\.productCode").val();
+		data["applyDate"] = $("#salesDate").val();
+		data["customerCode"] = $("#customerCode").val();
 		asyncRequest(
 				contextRoot + "/ajax/commonProduct/getProductInfos",
 				data,
