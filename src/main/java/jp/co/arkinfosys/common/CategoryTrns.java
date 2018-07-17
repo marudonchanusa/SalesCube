@@ -41,6 +41,11 @@ public final class CategoryTrns {
 	public static final String TAX_CATEGORY_FREE = "5";
 
 	/**
+	 * 区分名：課税区分、区分コード名：軽油税
+	 */
+	public static final String TAX_CATEGORY_LIGHT_OIL = "6";
+
+	/**
 	 * 区分名：商品端数処理、区分コード名：切捨て
 	 */
 	public static final String FLACT_CATEGORY_DOWN = "0";
