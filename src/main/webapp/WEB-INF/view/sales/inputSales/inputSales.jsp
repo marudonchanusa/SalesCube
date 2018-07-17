@@ -1202,15 +1202,13 @@
 						// 在庫情報を検索してmapに設定する
 						searchProductStock(value);
 						// 数量が入っていたらまとめ買い値引きを実施
-						if( $("#salesLineList\\["+index+"\\]\\.quantity").val() != "" ){
-							// 割引単価取得　合計再計算はこの中で実施
-							searchBulkPrice(index);
-						}else{
-							calcUnitRetailPrice(index);
-							calcUnitCost(index);
-							// 下部の合計欄を計算する
-							reCalc();
-						}
+
+						//再計算
+						calcUnitRetailPrice(index);
+						calcUnitCost(index);
+						// 下部の合計欄を計算する
+						reCalc();
+
 						changeOn();
 
 						// 廃止されている商品は警告ダイアログを表示し、処理を続行する。
@@ -1370,8 +1368,13 @@
 		async_request_off = true;
 
 		var index = event.data.index;
+/*
 		// まとめ買い値引き単価を取得する
 		searchBulkPrice(index);
+*/
+		//まとめ買いの機能を使わないで単純に再計算
+		calcQuantity( index );
+
 	}
 
 	// 数量変更

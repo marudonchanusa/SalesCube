@@ -101,9 +101,8 @@ public class CommonProductAction extends CommonAjaxResources {
 		try {
 
 			//顧客コードと適用年月日がセットされている場合、商品取得方法を切り替える
-			if (!commonProductForm.applyDate.isEmpty() &&
-					!commonProductForm.customerCode.isEmpty()) {
-
+			if (StringUtil.hasLength(commonProductForm.applyDate) &&
+				StringUtil.hasLength(commonProductForm.customerCode)) {
 				product = productService
 						.findByCustomerRetailPriceCondition(commonProductForm.productCode,
 															commonProductForm.customerCode,
