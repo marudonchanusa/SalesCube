@@ -7,15 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import jp.co.arkinfosys.common.CategoryTrns;
-import jp.co.arkinfosys.common.Constants;
-import jp.co.arkinfosys.common.Constants.MENU_ID;
-import jp.co.arkinfosys.dto.AbstractSlipDto;
-import jp.co.arkinfosys.dto.porder.InputPOrderLineDto;
-import jp.co.arkinfosys.dto.porder.InputPOrderSlipDto;
-import jp.co.arkinfosys.form.AbstractSlipEditForm;
-import jp.co.arkinfosys.service.exception.ServiceException;
-
 import org.seasar.framework.beans.util.BeanMap;
 import org.seasar.framework.beans.util.Beans;
 import org.seasar.struts.annotation.Arg;
@@ -27,6 +18,15 @@ import org.seasar.struts.annotation.Maxlength;
 import org.seasar.struts.annotation.Msg;
 import org.seasar.struts.annotation.Required;
 import org.seasar.struts.annotation.Validwhen;
+
+import jp.co.arkinfosys.common.CategoryTrns;
+import jp.co.arkinfosys.common.Constants;
+import jp.co.arkinfosys.common.Constants.MENU_ID;
+import jp.co.arkinfosys.dto.AbstractSlipDto;
+import jp.co.arkinfosys.dto.porder.InputPOrderLineDto;
+import jp.co.arkinfosys.dto.porder.InputPOrderSlipDto;
+import jp.co.arkinfosys.form.AbstractSlipEditForm;
+import jp.co.arkinfosys.service.exception.ServiceException;
 /**
  * 発注入力画面のアクションフォームクラスです.
  *
@@ -226,7 +226,7 @@ public class InputPOrderForm extends AbstractSlipEditForm<InputPOrderLineDto> {
 	 * 消費税率
 	 */
 	public String ctaxRate;
-	
+
 	/**
 	 * 伝票合計外貨金額
 	 */
@@ -315,14 +315,14 @@ public class InputPOrderForm extends AbstractSlipEditForm<InputPOrderLineDto> {
 
 		cUnitSignList = null;
 		defaultCUnit = null;
-		
+
 		/**
 		 * 伝票合計
 		 */
 		priceTotal = null;
 		ctaxTotal = null;
 		fePriceTotal = null;
-		
+
 		// 消費税率
 		this.ctaxRate = super.taxRate;
 
@@ -339,7 +339,7 @@ public class InputPOrderForm extends AbstractSlipEditForm<InputPOrderLineDto> {
 
 		//初期値の端数処理
 		defTaxFractCategory = mineDto.taxFractCategory;
-		defTaxPriceDecAlignment = String.valueOf(0);
+		defTaxPriceDecAlignment = String.valueOf(mineDto.unitPriceDecAlignment.intValue());
 
 		defPriceFractCategory = mineDto.priceFractCategory;
 		defDolUnitPriceDecAlignment = String.valueOf(mineDto.unitPriceDecAlignment.intValue());
@@ -349,7 +349,7 @@ public class InputPOrderForm extends AbstractSlipEditForm<InputPOrderLineDto> {
 		defNumDecAlignment = String.valueOf(mineDto.numDecAlignment.intValue());
 
 	}
-	
+
 	/**
 	 * 税マスタから取得した現在有効な税率と、伝票作成当時の税率が異なる場合は、伝票作成時の税率を使用する
 	 */
@@ -358,7 +358,7 @@ public class InputPOrderForm extends AbstractSlipEditForm<InputPOrderLineDto> {
 		if (this.ctaxRate != null && super.taxRate != this.ctaxRate) {
 			super.taxRate = this.ctaxRate;
 		}
-		
+
 		if (this.ctaxRate == "" || this.ctaxRate == null) {
 			this.ctaxRate = super.taxRate;
 		}
@@ -455,7 +455,7 @@ public class InputPOrderForm extends AbstractSlipEditForm<InputPOrderLineDto> {
 
 		//初期値の端数処理
 		defTaxFractCategory = mineDto.taxFractCategory;
-		defTaxPriceDecAlignment = String.valueOf(0);
+		defTaxPriceDecAlignment = String.valueOf(mineDto.unitPriceDecAlignment.intValue());
 
 		defPriceFractCategory = mineDto.priceFractCategory;
 		defDolUnitPriceDecAlignment = String.valueOf(mineDto.unitPriceDecAlignment.intValue());

@@ -11,6 +11,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.seasar.framework.beans.Converter;
+import org.seasar.framework.beans.util.Beans;
+
 import jp.co.arkinfosys.common.CategoryTrns;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.common.StringUtil;
@@ -20,9 +23,6 @@ import jp.co.arkinfosys.entity.PoLineTrn;
 import jp.co.arkinfosys.entity.SupplierLineTrn;
 import jp.co.arkinfosys.s2extend.NumberConverter;
 import jp.co.arkinfosys.service.exception.ServiceException;
-
-import org.seasar.framework.beans.Converter;
-import org.seasar.framework.beans.util.Beans;
 
 /**
  * 仕入伝票明細行サービスクラスです.
@@ -383,7 +383,7 @@ public class SupplierLineService extends AbstractLineService<SupplierLineTrn,Pur
 
 		Map<String, Object> param = super.createSqlParam();
 		param.put(SupplierSlipService.Param.DELIVERY_PROCESS_CATEGORY, deliveryProcessCategory); // 完納区分
-		param.put(SupplierSlipService.Param.PO_LINE_ID, poLineId); // 
+		param.put(SupplierSlipService.Param.PO_LINE_ID, poLineId); //
 
 		// SQLクエリを投げる
 		return  this.updateBySqlFile(
@@ -512,7 +512,7 @@ public class SupplierLineService extends AbstractLineService<SupplierLineTrn,Pur
 				super.mineDto.productFractCategory,
 				super.mineDto.numDecAlignment, true);
 		// 円単価端数処理
-		Converter yenConv = new NumberConverter(dto.priceFractCategory, 0, true);
+		Converter yenConv = new NumberConverter(dto.priceFractCategory, super.mineDto.unitPriceDecAlignment, true);
 		// 外貨単価端数処理
 		Converter dolConv = new NumberConverter(dto.priceFractCategory, super.mineDto.unitPriceDecAlignment, true);
 		// レート

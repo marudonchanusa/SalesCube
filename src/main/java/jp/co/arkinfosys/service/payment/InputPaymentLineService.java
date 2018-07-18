@@ -9,6 +9,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.seasar.framework.beans.Converter;
+import org.seasar.framework.beans.util.Beans;
+
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.dto.payment.InputPaymentDto;
 import jp.co.arkinfosys.dto.payment.InputPaymentLineDto;
@@ -20,9 +23,6 @@ import jp.co.arkinfosys.service.AbstractService;
 import jp.co.arkinfosys.service.SeqMakerService;
 import jp.co.arkinfosys.service.TaxRateService;
 import jp.co.arkinfosys.service.exception.ServiceException;
-
-import org.seasar.framework.beans.Converter;
-import org.seasar.framework.beans.util.Beans;
 
 /**
  * 支払入力明細行サービスクラスです.
@@ -170,7 +170,7 @@ public class InputPaymentLineService extends AbstractLineService<PaymentLineTrn,
 			Converter numConv = new NumberConverter(super.mineDto.productFractCategory, super.mineDto.numDecAlignment, true);
 
 			// 円単価端数処理
-			Converter yenConv = new NumberConverter(dto.priceFractCategory, 0, true);
+			Converter yenConv = new NumberConverter(dto.priceFractCategory, super.mineDto.unitPriceDecAlignment, true);
 
 			// 外貨単価端数処理
 			Converter dolConv = new NumberConverter(dto.priceFractCategory, super.mineDto.unitPriceDecAlignment, true);

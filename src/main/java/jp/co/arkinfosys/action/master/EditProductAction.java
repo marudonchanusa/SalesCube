@@ -283,7 +283,8 @@ public class EditProductAction extends
 		// 単価端数処理コード
 		this.editProductForm.priceFractCategory = super.mineDto.priceFractCategory;
 		// 円単価小数桁数
-		this.editProductForm.unitPriceDecAlignment = "0";
+		this.editProductForm.unitPriceDecAlignment = String
+				.valueOf(super.mineDto.unitPriceDecAlignment);;
 		// ドル単価小数桁数
 		this.editProductForm.dolUnitPriceDecAlignment = String
 				.valueOf(super.mineDto.unitPriceDecAlignment);

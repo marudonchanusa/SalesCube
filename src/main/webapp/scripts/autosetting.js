@@ -448,7 +448,7 @@ var SlipPriceManager = function() {
 	 * 金額合計を計算する
 	 */
 	this.calcPrice = function() {
-		
+
 		// 本体金額合計と外貨伝票合計金額を計算する
 		var priceTotal = new BigDecimal("0");
 		var ctaxTotal = new BigDecimal("0");
@@ -527,7 +527,7 @@ var SlipPriceManager = function() {
 			fePriceTotal = this.setDolScale(fePriceTotal);
 			this.PriceInfo.fePriceTotal = fePriceTotal.toString();
 		}
-		
+
 		// 本体金額合計と買掛残高から支払残高を計算する
 		if (this.aptBalance) {
 			var b = new BigDecimal(_getNumStr(this.aptBalance));
@@ -867,7 +867,7 @@ function changeUnitPrice(info) {
 function changeTaxRate(taxrateValue){
 	// 消費税計算
 	manager.ctaxRateSlip = taxrateValue;
-	
+
 	for ( var key in manager.unitPriceDict) {
 		var linePriceInfo = manager.unitPriceDict[key];
 
@@ -879,7 +879,7 @@ function changeTaxRate(taxrateValue){
 
 			var taxRate = new BigDecimal(taxrateValue);
 			var p = new BigDecimal(_getNumStr(linePriceInfo.price.value));
-			
+
 			var ctaxp = p.multiply(taxRate).divide(new BigDecimal("100.0"));
 			ctaxp = manager.setYenScale(ctaxp);
 
@@ -970,5 +970,5 @@ function changeTaxRate(taxrateValue){
 		 this.changeDolUnitPrice();
 	 }
  }
- 
- 
+
+

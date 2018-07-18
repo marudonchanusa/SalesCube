@@ -11,6 +11,10 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.seasar.extension.jdbc.exception.SNonUniqueResultException;
+import org.seasar.framework.beans.Converter;
+import org.seasar.framework.beans.util.Beans;
+
 import jp.co.arkinfosys.common.CategoryTrns;
 import jp.co.arkinfosys.common.Constants;
 import jp.co.arkinfosys.common.StringUtil;
@@ -31,10 +35,6 @@ import jp.co.arkinfosys.service.SupplierService;
 import jp.co.arkinfosys.service.YmService;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import jp.co.arkinfosys.service.exception.UnabledLockException;
-
-import org.seasar.extension.jdbc.exception.SNonUniqueResultException;
-import org.seasar.framework.beans.Converter;
-import org.seasar.framework.beans.util.Beans;
 
 /**
  * 支払入力サービスクラスです.
@@ -510,7 +510,7 @@ public class InputPaymentService extends AbstractSlipService<PaymentSlipTrn, Inp
 		Converter numConv = new NumberConverter(super.mineDto.productFractCategory, super.mineDto.numDecAlignment, true);
 
 		// 円単価端数処理
-		Converter yenConv = new NumberConverter(payTrnDto.priceFractCategory, 0, true);
+		Converter yenConv = new NumberConverter(payTrnDto.priceFractCategory, super.mineDto.unitPriceDecAlignment, true);
 
 		// 外貨単価端数処理
 		Converter dolConv = new NumberConverter(payTrnDto.priceFractCategory, super.mineDto.unitPriceDecAlignment, true);

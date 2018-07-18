@@ -29,7 +29,7 @@
 	var quantityCategory = ${mineDto.productFractCategory};
 
 	// 単価・金額の丸め（桁=0固定[円の場合]、丸め=得意先マスタ.単価端数処理　[得意先未指定]自社マスタ.単価端数処理）
-	var priceAlignment = scale_0;
+	var priceAlignment = ${mineDto.unitPriceDecAlignment};
 	// 伝票の単価端数処理 HIDDEN
 
 	// 消費税の丸め（桁=0固定[円の場合]、丸め=得意先マスタ.税端数処理　[得意先未指定]自社マスタ.税端数処理）
@@ -88,6 +88,7 @@
 
 			$("#salesLineList\\[" + i + "\\]\\.quantity").bind("focus", {index: i}, function(e){ this.curVal=this.value; });
 			$("#salesLineList\\[" + i + "\\]\\.quantity").bind("blur", {index: i}, function(e){ if(this.curVal!=this.value){ this.value=this.value.toUpperCase(); changeQuantity(e); } });
+
 			$("#salesLineList\\[" + i + "\\]\\.unitRetailPrice").bind("focus", {index: i}, function(e){ this.curVal=this.value; });
 			$("#salesLineList\\[" + i + "\\]\\.unitRetailPrice").bind("blur", {index: i}, function(e){ if(this.curVal!=this.value){ this.value=this.value.toUpperCase(); changeUnitRetailPrice(e); } });
 			$("#salesLineList\\[" + i + "\\]\\.unitCost").bind("focus", {index: i}, function(e){ this.curVal=this.value; });
@@ -214,6 +215,7 @@
 	function applyNumeralStyles(){
 		// 明細行のIndex管理
 		var maxIndex = $("#tbodyLine").get(0).children.length-1;
+
 
 		for(var i=0; i<=maxIndex; i++) {
 			// 丸めの少数桁と端数処理を設定する

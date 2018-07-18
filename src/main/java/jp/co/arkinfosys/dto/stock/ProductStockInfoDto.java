@@ -578,7 +578,7 @@ public class ProductStockInfoDto {
 			return "";
 		}
 		DecimalFormat df = NumberUtil.createDecimalFormat(
-				this.priceFractCategory, 0, true);
+				this.priceFractCategory,  this.unitPriceDecAlignment, true);
 		return df.format(obj);
 	}
 

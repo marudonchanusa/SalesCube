@@ -8,6 +8,14 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
+import org.seasar.framework.beans.util.Beans;
+import org.seasar.struts.annotation.ActionForm;
+import org.seasar.struts.annotation.Execute;
+import org.seasar.struts.util.ActionMessagesUtil;
+import org.seasar.struts.util.MessageResourcesUtil;
+
 import jp.co.arkinfosys.action.AbstractSlipEditAction;
 import jp.co.arkinfosys.common.Categories;
 import jp.co.arkinfosys.common.CategoryTrns;
@@ -47,14 +55,6 @@ import jp.co.arkinfosys.service.SalesLineService;
 import jp.co.arkinfosys.service.SalesService;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import jp.co.arkinfosys.service.stock.InputStockSalesService;
-
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.LabelValueBean;
-import org.seasar.framework.beans.util.Beans;
-import org.seasar.struts.annotation.ActionForm;
-import org.seasar.struts.annotation.Execute;
-import org.seasar.struts.util.ActionMessagesUtil;
-import org.seasar.struts.util.MessageResourcesUtil;
 
 /**
  * 売上伝票入力処理を実行するアクションクラスです
@@ -323,9 +323,9 @@ public class InputSalesAction extends AbstractSlipEditAction<SalesSlipDto, Sales
 				}
 			}
 			// 数量
-			if( checkInt(lineDto.quantity, lineDto.lineNo,
+			if( checkEmpty(lineDto.quantity, lineDto.lineNo,
 							"labels.quantity") ){
-				Integer data = Integer.valueOf(lineDto.quantity);
+				Double data = Double.valueOf(lineDto.quantity);
 				if( data < 0 ){
 					minus++;
 				}else if( data > 0 ){

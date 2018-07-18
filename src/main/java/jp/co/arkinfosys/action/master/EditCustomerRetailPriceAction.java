@@ -262,7 +262,8 @@ public class EditCustomerRetailPriceAction extends
 		this.editCustomerRetailPriceForm.priceFractCategory = super.mineDto.priceFractCategory;
 
 		//単価少数桁
-		this.editCustomerRetailPriceForm.unitPriceDecAlignment = "0";
+		this.editCustomerRetailPriceForm.unitPriceDecAlignment = String
+				.valueOf(super.mineDto.unitPriceDecAlignFormat);
 
 		//外貨少数桁
 		this.editCustomerRetailPriceForm.dolUnitPriceDecAlignment = String

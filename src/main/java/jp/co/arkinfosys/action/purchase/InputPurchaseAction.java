@@ -9,6 +9,16 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.LabelValueBean;
+import org.seasar.framework.beans.Converter;
+import org.seasar.framework.beans.util.Beans;
+import org.seasar.struts.annotation.ActionForm;
+import org.seasar.struts.annotation.Execute;
+import org.seasar.struts.util.ActionMessagesUtil;
+import org.seasar.struts.util.MessageResourcesUtil;
+
 import jp.co.arkinfosys.action.AbstractSlipEditAction;
 import jp.co.arkinfosys.common.Categories;
 import jp.co.arkinfosys.common.CategoryTrns;
@@ -44,16 +54,6 @@ import jp.co.arkinfosys.service.SupplierService;
 import jp.co.arkinfosys.service.SupplierSlipService;
 import jp.co.arkinfosys.service.exception.ServiceException;
 import jp.co.arkinfosys.service.stock.InputStockPurchaseService;
-
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.LabelValueBean;
-import org.seasar.framework.beans.Converter;
-import org.seasar.framework.beans.util.Beans;
-import org.seasar.struts.annotation.ActionForm;
-import org.seasar.struts.annotation.Execute;
-import org.seasar.struts.util.ActionMessagesUtil;
-import org.seasar.struts.util.MessageResourcesUtil;
 
 /**
  * 仕入入力画面のアクションクラスです.
@@ -450,7 +450,8 @@ public class InputPurchaseAction extends AbstractSlipEditAction<PurchaseSlipDto,
 					super.mineDto.numDecAlignment, true);
 			// 円単価端数処理
 			Converter yenConv = new NumberConverter(
-					poSlipTrnSingle.priceFractCategory, 0, true);
+					poSlipTrnSingle.priceFractCategory,
+					super.mineDto.unitPriceDecAlignment, true);
 			// 外貨単価端数処理
 			Converter dolConv = new NumberConverter(
 					poSlipTrnSingle.priceFractCategory,
