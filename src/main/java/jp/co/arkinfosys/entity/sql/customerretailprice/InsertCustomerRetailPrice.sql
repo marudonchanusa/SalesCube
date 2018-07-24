@@ -1,4 +1,4 @@
-INSERT INTO customer_retail_price_/*$domainId*/
+INSERT INTO CUSTOMER_RETAIL_PRICE_/*$domainId*/
 (
 	CUSTOMER_RETAIL_PRICE_ID,
 	APPLY_DATE,
