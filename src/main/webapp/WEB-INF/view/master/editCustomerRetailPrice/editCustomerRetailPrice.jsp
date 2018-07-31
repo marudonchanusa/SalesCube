@@ -11,7 +11,6 @@
 		applyPriceAlignment();
 	});
 
-
     // ファンクションキーとのマッピング
     function onF1() { initForm(); }
     function onF2() { backToSearch(); }
