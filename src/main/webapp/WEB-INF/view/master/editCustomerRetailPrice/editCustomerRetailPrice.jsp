@@ -1,12 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html lang="ja">
 <head>
-	<title><bean:message key='titles.system'/>　顧客別単価管理(登録・編集)</title>
-
 	<%@ include file="/WEB-INF/view/common/header.jsp" %>
 
+	<title><bean:message key='titles.system'/>　顧客別単価管理(登録・編集)</title>
+
 	<script type="text/javascript">
-	<!--
 
 	$(function() {
 		applyPriceAlignment();
@@ -30,6 +29,7 @@
         }
     }
 
+    // 顧客別単価登録
     function registerCustomerRetailPrice() {
         <c:if test="${!editMode}">
     	if(confirm("<bean:message key='confirm.insert'/>")){
@@ -44,6 +44,7 @@
         }
     }
 
+    // 顧客別単価削除
     function deleteCustomerRetailPrice() {
     	if(confirm("<bean:message key='confirm.delete'/>")){
         	$("#editCustomerRetailPriceForm").attr("action", "${f:url("/master/editCustomerRetailPrice/delete")}");
@@ -52,9 +53,7 @@
         }
     }
 
-	/**
-	 * 数量小数桁処理と端数処理を適用する
-	 */
+	// 数量小数桁処理と端数処理を適用する
 	function applyQuantityAlignment(jQueryObject) {
 		if(jQueryObject != null) {
 			jQueryObject.setBDCStyle( ${mineDto.productFractCategory} ,${mineDto.numDecAlignment} ).attBDC();
@@ -99,9 +98,7 @@
 		);
 	}
 
-	/**
-	 * 顧客検索ダイアログを開く
-	 */
+	// 顧客検索ダイアログを開く
 	function customerSearch(jqObject) {
 		var dialogId = jqObject.attr("id") + "Dialog";
 		openSearchCustomerDialog(
@@ -117,9 +114,35 @@
 		$("#" + dialogId + "_customerCode").focus();
 	}
 
-	/**
-	* 商品検索ダイアログを開く
-	*/
+	// 顧客コード変更
+	function changeCustomerCode(){
+		//顧客情報取得
+		GetCustomerInfos();
+	}
+
+	// 顧客情報の取得
+	function GetCustomerInfos(){
+		if(jQuery.trim($("#customerCode").attr("value"))==""){
+			$("#customerName").val("");
+			return;
+		}
+		var data = new Object();
+		data["customerCode"] = $("#customerCode").attr("value");
+		asyncRequest(
+				contextRoot + "/ajax/commonCustomer/getCustomerInfoByCustomerCode",
+				data,
+				function(data) {
+					if(data==""){
+						$("#customerName").val("");
+						alert('<bean:message key="errors.customer.not.exist.code" />');
+					}else{
+						var value = eval("(" + data + ")");
+						$("#customerName").val(value["customerName"]);
+					}
+				});
+	}
+
+	// 商品検索ダイアログを開く
 	function productSearch(jqObject) {
 		var dialogId = jqObject.attr("id") + "Dialog";
 		openSearchProductDialog(
@@ -135,7 +158,34 @@
 		$("#" + dialogId + "_productCode").focus();
 	}
 
-	-->
+	// 商品コード変更
+	function changeProductCode() {
+		//商品情報取得
+		GetProductInfos();
+	}
+
+	// 商品情報の取得
+	function GetProductInfos(){
+		if(jQuery.trim($("#productCode").attr("value"))==""){
+			$("#productName").val("");
+			return;
+		}
+		var data = new Object();
+		data["productCode"] = $("#productCode").attr("value");
+		asyncRequest(
+				contextRoot + "/ajax/commonProduct/getProductInfos",
+				data,
+				function(data) {
+					if(data==""){
+						$("#productName").val("");
+						alert('<bean:message key="errors.dispProductPrice.none.productCode" />');
+					}else{
+						var value = eval("(" + data + ")");
+						$("#productName").val(value["productName"]);
+					}
+				});
+	}
+
 	</script>
 </head>
 <body onhelp="return false;" onload="init()">

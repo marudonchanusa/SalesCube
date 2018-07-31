@@ -888,7 +888,7 @@
 
 	//顧客コード変更
 	function ChangeCustomerCode(){
-		//仕入先情報取得
+		//顧客情報取得
 		GetCustomerInfos();
 	}
 
