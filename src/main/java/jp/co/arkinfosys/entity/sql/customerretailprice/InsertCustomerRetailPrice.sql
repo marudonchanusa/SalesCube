@@ -11,6 +11,7 @@ INSERT INTO CUSTOMER_RETAIL_PRICE_/*$domainId*/
 	UPD_FUNC,
 	UPD_DATETM,
 	UPD_USER
+	
 )
 VALUES
 (
@@ -26,4 +27,5 @@ VALUES
 	now(),
 	/*updUser*/
 )
+
 
